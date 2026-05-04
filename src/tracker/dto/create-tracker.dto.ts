@@ -1,1 +1,5 @@
-export class CreateTrackerDto {}
+export class CreateTrackerDto {
+  titulo!: string;
+  categoria!: string;
+  nota!: number;
+}

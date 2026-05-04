@@ -1,12 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTrackerDto } from '../dto/create-tracker.dto';
 import { UpdateTrackerDto } from '../dto/update-tracker.dto';
+import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
 export class TrackerService {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  create(createTrackerDto: CreateTrackerDto) {
-    return 'This action adds a new tracker';
+  constructor(private prisma: PrismaService) {}
+
+  async create(createTrackerDto: CreateTrackerDto) {
+    return await this.prisma.tracker.create({
+      data: createTrackerDto,
+    });
   }
 
   findAll() {
