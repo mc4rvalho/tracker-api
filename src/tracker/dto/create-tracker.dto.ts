@@ -1,12 +1,13 @@
-import { IsInt, IsNotEmpty, IsString, Max, Min } from 'class-validator';
+import { IsEnum, IsInt, IsNotEmpty, IsString, Max, Min } from 'class-validator';
+import { CategoriaEnum } from '../enums/categoria.enum';
 
 export class CreateTrackerDto {
   @IsString()
   @IsNotEmpty()
   titulo!: string;
 
-  @IsString()
-  categoria!: string;
+  @IsEnum(CategoriaEnum)
+  categoria!: CategoriaEnum;
 
   @IsInt()
   @Min(0)
