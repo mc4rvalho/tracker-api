@@ -13,20 +13,22 @@ export class TrackerService {
     });
   }
 
-  findAll() {
-    return `This action returns all tracker`;
+  async findAll() {
+    return await this.prisma.tracker.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} tracker`;
+  async findOne(id: string) {
+    return await this.prisma.tracker.findUnique({
+      where: { id },
+    });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  update(id: number, updateTrackerDto: UpdateTrackerDto) {
+  update(id: string, updateTrackerDto: UpdateTrackerDto) {
     return `This action updates a #${id} tracker`;
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} tracker`;
   }
 }
