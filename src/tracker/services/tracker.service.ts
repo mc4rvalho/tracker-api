@@ -23,12 +23,16 @@ export class TrackerService {
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  update(id: string, updateTrackerDto: UpdateTrackerDto) {
-    return `This action updates a #${id} tracker`;
+  async update(id: string, updateTrackerDto: UpdateTrackerDto) {
+    return await this.prisma.tracker.update({
+      where: { id },
+      data: updateTrackerDto,
+    });
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} tracker`;
+  async remove(id: string) {
+    return await this.prisma.tracker.delete({
+      where: { id },
+    });
   }
 }
