@@ -13,9 +13,133 @@ datasource db {
   provider = "postgresql"
 }
 
-model Tracker {
-  id        String @id @default(uuid())
-  titulo    String
-  categoria String
-  nota      Int
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Status {
+  WISHLIST
+  IN_PROGRESS
+  FINISHED
+}
+
+model User {
+  id       String @id @default(uuid())
+  name     String
+  email    String @unique
+  password String
+
+  // Enum
+  role Role @default(USER)
+
+  // Relations
+  profile Profile?
+  movies   Movie[]
+  series  Series[]
+  books   Book[]
+  games   Game[]
+
+  // Dates
+  createdAt DateTime @default(now())
+}
+
+model Profile {
+  id  String @id @default(uuid())
+  bio String
+
+  // Relations
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
+}
+
+model Movie {
+  id       String @id @default(uuid())
+  title    String
+  category String
+  grade    Float
+
+  // Tag for Genre
+  tags String[]
+
+  // Enum
+  status Status @default(WISHLIST)
+
+  // Relations
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  // Dates
+  createdAt  DateTime  @default(now())
+  finishedAt DateTime?
+}
+
+model Series {
+  id              String @id @default(uuid())
+  title           String
+  category        String
+  grade           Float
+  watchedEpisodes Int
+  totalEpisodes   Int
+  seasons         Int
+  seasonsWatched  Int
+
+  // Tag for Genre
+  tags String[]
+
+  // Enum
+  status Status @default(WISHLIST)
+
+  // Relations
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  // Dates
+  createdAt  DateTime  @default(now())
+  finishedAt DateTime?
+}
+
+model Book {
+  id         String @id @default(uuid())
+  title      String
+  category   String
+  grade      Float
+  readPages  Int
+  totalPages Int
+
+  // Tag for Genre
+  tags String[]
+
+  // Enum
+  status Status @default(WISHLIST)
+
+  // Relations
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  // Dates
+  createdAt  DateTime  @default(now())
+  finishedAt DateTime?
+}
+
+model Game {
+  id          String @id @default(uuid())
+  title       String
+  category    String
+  grade       Float
+  hoursPlayed Float
+
+  // Tag for Genre
+  tags String[]
+
+  // Enum
+  status Status @default(WISHLIST)
+
+  // Relations
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  // Dates
+  createdAt  DateTime  @default(now())
+  finishedAt DateTime?
 }
