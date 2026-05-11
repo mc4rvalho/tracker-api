@@ -12,8 +12,8 @@ Foco em evoluir a estrutura de dados para suportar as novas categorias e métric
 Transformar o Back-end num integrador de dados dinâmico através de serviços externos.
 
 - [x] **Limpeza Arquitetural**: Deletar a antiga pasta `tracker` (Resource legado da v1).
-- [ ] **Integração TMDB**: Criar módulo/serviço (`TmdbService`) isolado para buscar dados de Filmes e Séries.
-- [ ] **Integração RAWG**: Criar módulo/serviço isolado para a API de games.
+- [x] **Integração TMDB**: Criar módulo/serviço (`TmdbService`) isolado para buscar dados de Filmes e Séries.
+- [x] **Integração RAWG**: Criar módulo/serviço isolado para a API de games.
 - [ ] **Integração Open Library**: Criar módulo/serviço isolado para a API de livros.
 - [ ] **Criação dos Domínios**: Gerar os Resources definitivos com o Nest CLI (`movies`, `series`, `books`, `games`).
 - [ ] **A Grande Conexão**: Injetar cada serviço externo em seu respectivo domínio (ex: `TmdbService` dentro de `MoviesService`; `RawgService` em `GamesService`) e expor as rotas de busca nos Controllers definitivos.

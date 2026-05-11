@@ -6,6 +6,8 @@ import { TmdbModule } from './tmdb/tmdb.module';
 import { MoviesModule } from './movies/movies.module';
 import { ConfigModule } from '@nestjs/config';
 import { SeriesModule } from './series/series.module';
+import { RawgModule } from './rawg/rawg.module';
+import { GamesModule } from './games/games.module';
 
 @Module({
   imports: [
@@ -14,6 +16,8 @@ import { SeriesModule } from './series/series.module';
     TmdbModule,
     MoviesModule,
     SeriesModule,
+    RawgModule,
+    GamesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

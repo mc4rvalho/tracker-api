@@ -49,7 +49,7 @@ export class TmdbService {
         .pipe(
           catchError((error: AxiosError) => {
             this.logger.error(error.response?.data);
-            throw new Error('Falha ao buscar o filme no TMDB');
+            throw new Error('Falha ao buscar a série no TMDB');
           }),
         ),
     );
