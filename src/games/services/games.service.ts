@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from '@nestjs/common';
+import { RawgService } from '../../integrations/rawg/rawg.service';
 import { CreateGameDto } from '../dto/create-game.dto';
 import { UpdateGameDto } from '../dto/update-game.dto';
-import { RawgService } from '../../rawg/rawg.service';
 
 @Injectable()
 export class GamesService {

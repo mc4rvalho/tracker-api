@@ -14,8 +14,8 @@ Transformar o Back-end num integrador de dados dinâmico através de serviços e
 - [x] **Limpeza Arquitetural**: Deletar a antiga pasta `tracker` (Resource legado da v1).
 - [x] **Integração TMDB**: Criar módulo/serviço (`TmdbService`) isolado para buscar dados de Filmes e Séries.
 - [x] **Integração RAWG**: Criar módulo/serviço isolado para a API de games.
-- [ ] **Integração Open Library**: Criar módulo/serviço isolado para a API de livros.
-- [ ] **Criação dos Domínios**: Gerar os Resources definitivos com o Nest CLI (`movies`, `series`, `books`, `games`).
+- [x] **Integração Open Library**: Criar módulo/serviço isolado para a API de livros.
+- [x] **Criação dos Domínios**: Gerar os Resources definitivos com o Nest CLI (`movies`, `series`, `books`, `games`).
 - [ ] **A Grande Conexão**: Injetar cada serviço externo em seu respectivo domínio (ex: `TmdbService` dentro de `MoviesService`; `RawgService` em `GamesService`) e expor as rotas de busca nos Controllers definitivos.
 
 ## 🧠 Sprint 3: O Cérebro Matemático (Dashboard & `.reduce()`)

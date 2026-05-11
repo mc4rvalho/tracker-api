@@ -1,13 +1,15 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { PrismaModule } from './prisma/prisma.module';
-import { TmdbModule } from './tmdb/tmdb.module';
-import { MoviesModule } from './movies/movies.module';
-import { ConfigModule } from '@nestjs/config';
-import { SeriesModule } from './series/series.module';
-import { RawgModule } from './rawg/rawg.module';
+import { BooksModule } from './books/books.module';
 import { GamesModule } from './games/games.module';
+import { OpenLibraryModule } from './integrations/open-library/open-library.module';
+import { RawgModule } from './integrations/rawg/rawg.module';
+import { MoviesModule } from './movies/movies.module';
+import { PrismaModule } from './prisma/prisma.module';
+import { SeriesModule } from './series/series.module';
+import { TmdbModule } from './integrations/tmdb/tmdb.module';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { GamesModule } from './games/games.module';
     SeriesModule,
     RawgModule,
     GamesModule,
+    BooksModule,
+    OpenLibraryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

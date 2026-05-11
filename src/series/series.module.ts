@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
+import { TmdbModule } from '../integrations/tmdb/tmdb.module';
 import { SeriesController } from './controllers/series.controller';
 import { SeriesService } from './services/series.service';
-import { TmdbModule } from '../tmdb/tmdb.module';
 
 @Module({
   imports: [TmdbModule],

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
+import { RawgModule } from '../integrations/rawg/rawg.module';
 import { GamesController } from './controllers/games.controller';
 import { GamesService } from './services/games.service';
-import { RawgModule } from '../rawg/rawg.module';
 
 @Module({
   imports: [RawgModule],

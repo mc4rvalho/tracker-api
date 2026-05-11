@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from '@nestjs/common';
+import { TmdbService } from '../../integrations/tmdb/tmdb.service';
 import { CreateMovieDto } from '../dto/create-movie.dto';
 import { UpdateMovieDto } from '../dto/update-movie.dto';
-import { TmdbService } from '../../tmdb/tmdb.service';
 
 @Injectable()
 export class MoviesService {

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from '@nestjs/common';
+import { TmdbService } from '../../integrations/tmdb/tmdb.service';
 import { CreateSeriesDto } from '../dto/create-series.dto';
 import { UpdateSeriesDto } from '../dto/update-series.dto';
-import { TmdbService } from '../../tmdb/tmdb.service';
 
 @Injectable()
 export class SeriesService {
