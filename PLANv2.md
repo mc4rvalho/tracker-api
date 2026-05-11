@@ -1,6 +1,6 @@
 # 🗺️ Planejamento: Tracker v2.0
 
-## 🗄️ Sprint 1: O Novo Alicerce (Prisma & Banco de Dados)
+## 🗄️ Sprint 1: O Novo Alicerce (Prisma & Banco de Dados) -> (Domingo)
 Foco em evoluir a estrutura de dados para suportar as novas categorias e métricas de consumo.
 
 - [x] **Refatoração do `schema.prisma`**: Criar User e Role e uma estrutura flexível que acomode Movie, Series, Game e Book.
@@ -11,9 +11,12 @@ Foco em evoluir a estrutura de dados para suportar as novas categorias e métric
 ## ⚙️ Sprint 2: O Motor de Busca (NestJS + APIs Externas)
 Transformar o Back-end num integrador de dados dinâmico através de serviços externos.
 
-- [ ] **Integração TMDB (The Movie Database)**: Configurar busca de metadados, sinopses e capas para Filmes e Séries.
-- [ ] **Integração RAWG**: Conectar à API de games para obter capas e detalhes técnicos de jogos.
-- [ ] **Integração Open Library**: Configurar a busca de livros por título, autor ou ISBN.
+- [x] **Limpeza Arquitetural**: Deletar a antiga pasta `tracker` (Resource legado da v1).
+- [ ] **Integração TMDB**: Criar módulo/serviço (`TmdbService`) isolado para buscar dados de Filmes e Séries.
+- [ ] **Integração RAWG**: Criar módulo/serviço isolado para a API de games.
+- [ ] **Integração Open Library**: Criar módulo/serviço isolado para a API de livros.
+- [ ] **Criação dos Domínios**: Gerar os Resources definitivos com o Nest CLI (`movies`, `series`, `books`, `games`).
+- [ ] **A Grande Conexão**: Injetar cada serviço externo em seu respectivo domínio (ex: `TmdbService` dentro de `MoviesService`; `RawgService` em `GamesService`) e expor as rotas de busca nos Controllers definitivos.
 
 ## 🧠 Sprint 3: O Cérebro Matemático (Dashboard & `.reduce()`)
 Implementação da inteligência de agregação de dados no servidor.
