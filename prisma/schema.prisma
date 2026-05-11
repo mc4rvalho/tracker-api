@@ -105,13 +105,17 @@ model Series {
   finishedAt DateTime?
 }
 
-model Book {
-  id         String @id @default(uuid())
-  title      String
-  category   String
-  grade      Float
-  readPages  Int
-  totalPages Int
+model Game {
+  id          String  @id @default(uuid())
+  title       String
+  category    String
+  grade       Float
+  hoursPlayed Float
+  rawgId      Int
+  coverPath   String?
+  review      String?
+  platform    String
+  isPlatinum Boolean @default(false)
 
   // Tag for Genre
   tags String[]
@@ -128,12 +132,13 @@ model Book {
   finishedAt DateTime?
 }
 
-model Game {
-  id          String @id @default(uuid())
-  title       String
-  category    String
-  grade       Float
-  hoursPlayed Float
+model Book {
+  id         String @id @default(uuid())
+  title      String
+  category   String
+  grade      Float
+  readPages  Int
+  totalPages Int
 
   // Tag for Genre
   tags String[]

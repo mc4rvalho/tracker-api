@@ -17,32 +17,32 @@ export class GamesController {
   constructor(private readonly gamesService: GamesService) {}
 
   @Post()
-  create(@Body() createGameDto: CreateGameDto) {
-    return this.gamesService.create(createGameDto);
+  async create(@Body() createGameDto: CreateGameDto) {
+    return await this.gamesService.create(createGameDto);
   }
 
   @Get()
-  findAll() {
-    return this.gamesService.findAll();
+  async findAll() {
+    return await this.gamesService.findAll();
   }
 
   @Get('search')
-  async findSearch(@Query('title') title: string) {
-    return this.gamesService.searchFromRawg(title);
+  async findSearch(@Query('title') title: string): Promise<any[]> {
+    return await this.gamesService.searchFromRawg(title);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.gamesService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    return await this.gamesService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateGameDto: UpdateGameDto) {
-    return this.gamesService.update(+id, updateGameDto);
+  async update(@Param('id') id: string, @Body() updateGameDto: UpdateGameDto) {
+    return await this.gamesService.update(id, updateGameDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.gamesService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return await this.gamesService.remove(id);
   }
 }
