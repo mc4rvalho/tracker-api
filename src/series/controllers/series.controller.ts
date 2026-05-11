@@ -17,32 +17,35 @@ export class SeriesController {
   constructor(private readonly seriesService: SeriesService) {}
 
   @Post()
-  create(@Body() createSeriesDto: CreateSeriesDto) {
-    return this.seriesService.create(createSeriesDto);
+  async create(@Body() createSeriesDto: CreateSeriesDto) {
+    return await this.seriesService.create(createSeriesDto);
   }
 
   @Get()
-  findAll() {
-    return this.seriesService.findAll();
+  async findAll() {
+    return await this.seriesService.findAll();
   }
 
   @Get('search')
-  async findSearch(@Query('title') title: string) {
-    return this.seriesService.searchFromTmdb(title);
+  async findSearch(@Query('title') title: string): Promise<any[]> {
+    return await this.seriesService.searchFromTmdb(title);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.seriesService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    return await this.seriesService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSeriesDto: UpdateSeriesDto) {
-    return this.seriesService.update(+id, updateSeriesDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateSeriesDto: UpdateSeriesDto,
+  ) {
+    return await this.seriesService.update(id, updateSeriesDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.seriesService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return await this.seriesService.remove(id);
   }
 }

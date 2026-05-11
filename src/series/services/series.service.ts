@@ -1,34 +1,85 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { TmdbService } from '../../integrations/tmdb/tmdb.service';
 import { CreateSeriesDto } from '../dto/create-series.dto';
 import { UpdateSeriesDto } from '../dto/update-series.dto';
+import { PrismaService } from '../../prisma/prisma.service';
+import { Prisma, Series } from '../../../generated/prisma/client';
 
 @Injectable()
 export class SeriesService {
-  constructor(private readonly tmdb: TmdbService) {}
+  constructor(
+    private readonly tmdb: TmdbService,
+    private prisma: PrismaService,
+  ) {}
 
-  create(createSeriesDto: CreateSeriesDto) {
-    return 'This action adds a new series';
+  async create(createSeriesDto: CreateSeriesDto): Promise<Series> {
+    return this.prisma.series.create({
+      data: { ...createSeriesDto, userId: '123456abc' },
+    });
   }
 
-  findAll() {
-    return `This action returns all series`;
+  async findAll(filters?: {
+    title?: string;
+    category?: string;
+    grade?: number;
+    review?: string;
+    watchedEpisodes?: number;
+    totalEpisodes?: number;
+    seasons?: number;
+    seasonsWatched?: number;
+    tags?: string[];
+  }) {
+    return this.prisma.series.findMany({
+      where: {
+        userId: '123456abc',
+        title: filters?.title || undefined,
+        category: filters?.category || undefined,
+        grade: filters?.grade || undefined,
+        review: filters?.review || undefined,
+        watchedEpisodes: filters?.watchedEpisodes || undefined,
+        totalEpisodes: filters?.totalEpisodes || undefined,
+        seasons: filters?.seasons || undefined,
+        seasonsWatched: filters?.seasonsWatched || undefined,
+        tags: filters?.tags ? { hasEvery: filters.tags } : undefined,
+      },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} series`;
+  async findOne(id: string) {
+    return this.prisma.series.findUnique({ where: { id } });
   }
 
   async searchFromTmdb(title: string) {
     return this.tmdb.searchSeries(title);
   }
 
-  update(id: number, updateSeriesDto: UpdateSeriesDto) {
-    return `This action updates a #${id} series`;
+  async update(id: string, updateSeriesDto: UpdateSeriesDto) {
+    const dataToUpdate: Prisma.SeriesUpdateInput = {
+      ...updateSeriesDto,
+    };
+
+    if (updateSeriesDto.status === 'FINISHED') {
+      dataToUpdate.finishedAt = new Date();
+    }
+
+    return this.prisma.series.update({
+      where: { id },
+      data: dataToUpdate,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} series`;
+  async remove(id: string) {
+    try {
+      await this.prisma.series.delete({
+        where: { id },
+      });
+    } catch (error) {
+      throw new NotFoundException(
+        'Opa, essa série não existe ou já foi apagado!',
+      );
+    }
+
+    return { message: 'Série excluída com sucesso!' };
   }
 }

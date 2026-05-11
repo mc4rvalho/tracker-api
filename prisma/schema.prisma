@@ -78,12 +78,15 @@ model Movie {
 }
 
 model Series {
-  id              String @id @default(uuid())
+  id              String  @id @default(uuid())
   title           String
   category        String
   grade           Float
+  tmdbId          Int
+  posterPath      String?
+  review          String?
   watchedEpisodes Int
-  totalEpisodes   Int
+  totalEpisodes   Int?
   seasons         Int
   seasonsWatched  Int
 
