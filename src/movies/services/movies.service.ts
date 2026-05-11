@@ -1,34 +1,75 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { TmdbService } from '../../integrations/tmdb/tmdb.service';
 import { CreateMovieDto } from '../dto/create-movie.dto';
 import { UpdateMovieDto } from '../dto/update-movie.dto';
+import { PrismaService } from '../../prisma/prisma.service';
+import { Movie, Prisma } from '../../../generated/prisma/client';
 
 @Injectable()
 export class MoviesService {
-  constructor(private readonly tmdb: TmdbService) {}
+  constructor(
+    private readonly tmdb: TmdbService,
+    private prisma: PrismaService,
+  ) {}
 
-  create(createMovieDto: CreateMovieDto) {
-    return 'This action adds a new movie';
+  async create(createMovieDto: CreateMovieDto): Promise<Movie> {
+    return this.prisma.movie.create({
+      data: { ...createMovieDto, userId: '123456abc' },
+    });
   }
 
-  findAll() {
-    return `This action returns all movies`;
+  async findAll(filters?: {
+    title?: string;
+    category?: string;
+    grade?: number;
+    review?: string;
+    tags?: string[];
+  }) {
+    return this.prisma.movie.findMany({
+      where: {
+        userId: '123456abc',
+        title: filters?.title || undefined,
+        category: filters?.category || undefined,
+        grade: filters?.grade || undefined,
+        review: filters?.review || undefined,
+        tags: filters?.tags ? { hasEvery: filters.tags } : undefined,
+      },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} movie`;
+  async findOne(id: string) {
+    return this.prisma.movie.findUnique({ where: { id } });
   }
 
   async searchFromTmdb(title: string) {
     return this.tmdb.searchMovie(title);
   }
 
-  update(id: number, updateMovieDto: UpdateMovieDto) {
-    return `This action updates a #${id} movie`;
+  async update(id: string, updateMovieDto: UpdateMovieDto) {
+    const dataToUpdate: Prisma.MovieUpdateInput = { ...updateMovieDto };
+
+    if (updateMovieDto.status === 'FINISHED') {
+      dataToUpdate.finishedAt = new Date();
+    }
+
+    return this.prisma.movie.update({
+      where: { id },
+      data: dataToUpdate,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} movie`;
+  async remove(id: string) {
+    try {
+      await this.prisma.movie.delete({
+        where: { id },
+      });
+    } catch (error) {
+      throw new NotFoundException(
+        'Opa, esse filme não existe ou já foi apagado!',
+      );
+    }
+
+    return { message: 'Filme excluído com sucesso!' };
   }
 }

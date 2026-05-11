@@ -35,7 +35,7 @@ model User {
 
   // Relations
   profile Profile?
-  movies   Movie[]
+  movies  Movie[]
   series  Series[]
   books   Book[]
   games   Game[]
@@ -54,10 +54,13 @@ model Profile {
 }
 
 model Movie {
-  id       String @id @default(uuid())
-  title    String
-  category String
-  grade    Float
+  id         String  @id @default(uuid())
+  title      String
+  category   String
+  grade      Float
+  tmdbId     Int
+  posterPath String?
+  review     String?
 
   // Tag for Genre
   tags String[]

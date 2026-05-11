@@ -8,15 +8,16 @@ Foco em evoluir a estrutura de dados para suportar as novas categorias e métric
 - [x] **Implementação de Enums de Status**: Criar os estados de progresso (`WISHLIST`, `IN_PROGRESS`, `FINISHED`).
 - [x] **Tags e Temporalidade**: Adicionar suporte a gêneros/tags (Array de strings) e o campo `finishedAt`.
 
-## ⚙️ Sprint 2: O Motor de Busca (NestJS + APIs Externas)
-Transformar o Back-end num integrador de dados dinâmico através de serviços externos.
+## ⚙️ Sprint 2: O Motor de Busca e Persistência (APIs Externas + Prisma)
+Transformar o Back-end num integrador de dados dinâmico e construir a base de persistência (CRUD).
 
-- [x] **Limpeza Arquitetural**: Deletar a antiga pasta `tracker` (Resource legado da v1).
-- [x] **Integração TMDB**: Criar módulo/serviço (`TmdbService`) isolado para buscar dados de Filmes e Séries.
-- [x] **Integração RAWG**: Criar módulo/serviço isolado para a API de games.
-- [x] **Integração Open Library**: Criar módulo/serviço isolado para a API de livros.
-- [x] **Criação dos Domínios**: Gerar os Resources definitivos com o Nest CLI (`movies`, `series`, `books`, `games`).
-- [ ] **A Grande Conexão**: Injetar cada serviço externo em seu respectivo domínio (ex: `TmdbService` dentro de `MoviesService`; `RawgService` em `GamesService`) e expor as rotas de busca nos Controllers definitivos.
+- [x] **Limpeza Arquitetural**: Deletar a antiga pasta `tracker`.
+- [x] **Integrações (TMDB, RAWG, OpenLibrary)**: Criar os módulos/serviços isolados de busca.
+- [x] **Criação dos Domínios**: Gerar os Resources definitivos (`movies`, `series`, `books`, `games`).
+- [x] **A Grande Conexão**: Injetar cada serviço externo em seu respectivo domínio para as rotas de busca.
+- [ ] **Segurança de Entrada (DTOs)**: Configurar o `class-validator` nos Data Transfer Objects para proteger as rotas de criação e atualização de todos os domínios.
+- [ ] **Integração Prisma (CRUD)**: Implementar os métodos de criar, ler, atualizar e deletar usando o `this.prisma` nos services de todas as models.
+- [ ] **Regras de Negócio**: Lógica de preenchimento automático (ex: data de `finishedAt` preenchida ao mudar status para `FINISHED`).
 
 ## 🧠 Sprint 3: O Cérebro Matemático (Dashboard & `.reduce()`)
 Implementação da inteligência de agregação de dados no servidor.
