@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
-import { BooksController } from './controllers/books.controller';
-import { BooksService } from './entities/books.service';
 import { OpenLibraryModule } from '../integrations/open-library/open-library.module';
+import { BooksController } from './controllers/books.controller';
+import { BooksService } from './services/books.service';
+import { PrismaModule } from '../prisma/prisma.module';
 
 @Module({
-  imports: [OpenLibraryModule],
+  imports: [OpenLibraryModule, PrismaModule],
   controllers: [BooksController],
   providers: [BooksService],
   exports: [BooksService],

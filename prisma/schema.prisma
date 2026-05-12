@@ -24,6 +24,14 @@ enum Status {
   FINISHED
 }
 
+enum BookFormat {
+  HARDCOVER
+  PAPERBACK
+  EBOOK
+  AUDIOBOOK
+  PDF
+}
+
 model User {
   id       String @id @default(uuid())
   name     String
@@ -137,6 +145,10 @@ model Book {
   title      String
   category   String
   grade      Float
+  openLibraryId String
+  coverPath   String?
+  review      String?
+  author String
   readPages  Int
   totalPages Int
 
@@ -145,6 +157,7 @@ model Book {
 
   // Enum
   status Status @default(WISHLIST)
+  format BookFormat @default(PAPERBACK)
 
   // Relations
   user   User   @relation(fields: [userId], references: [id])
