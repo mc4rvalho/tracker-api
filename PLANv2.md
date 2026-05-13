@@ -22,11 +22,11 @@ Transformar o Back-end num integrador de dados dinâmico e construir a base de p
 ## 🧠 Sprint 3: O Cérebro Matemático (Dashboard & Analytics)
 Implementação da inteligência de agregação de dados no servidor.
 
-- [ ] **Criação do DashboardModule**: Estruturação de um módulo, controller e service independentes.
-- [ ] **Criação da Rota `/dashboard`**: Endpoints dedicados para fornecer dados consolidados ao Front-end.
-- [ ] **Lógica de Agregação (Totais)**: Somatório de horas jogadas (Games), páginas lidas (Books) e episódios assistidos (Series).
+- [x] **Criação do DashboardModule**: Estruturação de um módulo, controller e service independentes.
+- [x] **Criação da Rota `/dashboard`**: Endpoints dedicados para fornecer dados consolidados ao Front-end.
+- [x] **Lógica de Agregação (Totais)**: Somatório de horas jogadas (Games), páginas lidas (Books) e episódios assistidos (Series).
 - [ ] **Lógica de Avaliação (Médias)**: Cálculo da média geral de notas usando `.reduce()` para descobrir o desempenho por categoria.
-- [ ] **Filtros e Contagem**: Contagem exata de itens agrupados por status (`WISHLIST`, `IN_PROGRESS`, `FINISHED`).
+- [x] **Filtros e Contagem**: Contagem exata de itens agrupados por status (`WISHLIST`, `IN_PROGRESS`, `FINISHED`).
 - [ ] **Ranqueamento de Tags**: Algoritmo para ranquear os gêneros favoritos com base na repetição de tags.
 - [ ] **Histórico de Atividade**: Busca dos últimos itens interagidos para a seção "Continuar de onde parou".
 

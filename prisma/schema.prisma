@@ -50,6 +50,7 @@ model User {
 
   // Dates
   createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Profile {
@@ -82,6 +83,7 @@ model Movie {
 
   // Dates
   createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now()) @updatedAt
   finishedAt DateTime?
 }
 
@@ -110,6 +112,7 @@ model Series {
 
   // Dates
   createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now()) @updatedAt
   finishedAt DateTime?
 }
 
@@ -123,7 +126,7 @@ model Game {
   coverPath   String?
   review      String?
   platform    String
-  isPlatinum Boolean @default(false)
+  isPlatinum  Boolean @default(false)
 
   // Tag for Genre
   tags String[]
@@ -137,26 +140,27 @@ model Game {
 
   // Dates
   createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now()) @updatedAt
   finishedAt DateTime?
 }
 
 model Book {
-  id         String @id @default(uuid())
-  title      String
-  category   String
-  grade      Float
+  id            String  @id @default(uuid())
+  title         String
+  category      String
+  grade         Float
   openLibraryId String
-  coverPath   String?
-  review      String?
-  author String
-  readPages  Int
-  totalPages Int
+  coverPath     String?
+  review        String?
+  author        String
+  readPages     Int
+  totalPages    Int
 
   // Tag for Genre
   tags String[]
 
   // Enum
-  status Status @default(WISHLIST)
+  status Status     @default(WISHLIST)
   format BookFormat @default(PAPERBACK)
 
   // Relations
@@ -165,5 +169,6 @@ model Book {
 
   // Dates
   createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now()) @updatedAt
   finishedAt DateTime?
 }

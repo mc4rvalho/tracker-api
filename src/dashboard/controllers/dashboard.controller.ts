@@ -15,8 +15,8 @@ export class DashboardController {
   //   return await this.dash.getAnalytics();
   // }
 
-  // @Get('recent')
-  // async getRecentActivity() {
-  //   return await this.dash.getRecentActivity();
-  // }
+  @Get('recent')
+  async getRecentActivity() {
+    return await this.dash.getRecentActivity();
+  }
 }

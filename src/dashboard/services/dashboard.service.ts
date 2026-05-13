@@ -7,6 +7,11 @@ export class DashboardService {
 
   async getTotals() {
     // 1. Agregações de Soma
+    const series = this.prisma.series.aggregate({
+      _sum: { watchedEpisodes: true },
+      where: { userId: '123456abc' },
+    });
+
     const game = this.prisma.game.aggregate({
       _sum: { hoursPlayed: true },
       where: { userId: '123456abc' },
@@ -17,12 +22,19 @@ export class DashboardService {
       where: { userId: '123456abc' },
     });
 
-    const series = this.prisma.series.aggregate({
-      _sum: { watchedEpisodes: true },
+    // 2. Agregações de Contagem por Grupo (Status)
+    const resultStatusMovie = this.prisma.movie.groupBy({
+      by: ['status'],
       where: { userId: '123456abc' },
+      _count: { status: true },
     });
 
-    // 2. Agregações de Contagem por Grupo (Status)
+    const resultStatusSeries = this.prisma.series.groupBy({
+      by: ['status'],
+      where: { userId: '123456abc' },
+      _count: { status: true },
+    });
+
     const resultStatusGame = this.prisma.game.groupBy({
       by: ['status'],
       where: { userId: '123456abc' },
@@ -35,27 +47,23 @@ export class DashboardService {
       _count: { status: true },
     });
 
-    const resultStatusSeries = this.prisma.series.groupBy({
-      by: ['status'],
-      where: { userId: '123456abc' },
-      _count: { status: true },
-    });
-
     // 3. Execução Paralela
     const [
+      resultSeries,
       resultGame,
       resultBook,
-      resultSeries,
+      queryStatusMovie,
+      queryStatusSeries,
       queryStatusGame,
       queryStatusBook,
-      queryStatusSeries,
     ] = await Promise.all([
+      series,
       game,
       book,
-      series,
+      resultStatusMovie,
+      resultStatusSeries,
       resultStatusGame,
       resultStatusBook,
-      resultStatusSeries,
     ]);
 
     // 4. Consolidação dos Status
@@ -66,9 +74,10 @@ export class DashboardService {
     };
 
     const superArray = [
+      ...queryStatusMovie,
+      ...queryStatusSeries,
       ...queryStatusGame,
       ...queryStatusBook,
-      ...queryStatusSeries,
     ];
 
     superArray.forEach((item) => {
@@ -77,10 +86,83 @@ export class DashboardService {
 
     // 5. Retorno Final Limpo
     return {
+      totalWatchedEpisodes: resultSeries._sum.watchedEpisodes || 0,
       totalHoursPlayed: resultGame._sum.hoursPlayed || 0,
       totalReadPages: resultBook._sum.readPages || 0,
-      totalWatchedEpisodes: resultSeries._sum.watchedEpisodes || 0,
       statusDistribution,
     };
+  }
+
+  async getRecentActivity() {
+    const movie = this.prisma.movie.findMany({
+      where: {
+        userId: '123456abc',
+      },
+      orderBy: {
+        updatedAt: 'desc',
+      },
+      take: 5,
+    });
+
+    const series = this.prisma.series.findMany({
+      where: {
+        userId: '123456abc',
+      },
+      orderBy: {
+        updatedAt: 'desc',
+      },
+      take: 5,
+    });
+
+    const game = this.prisma.game.findMany({
+      where: {
+        userId: '123456abc',
+      },
+      orderBy: {
+        updatedAt: 'desc',
+      },
+      take: 5,
+    });
+
+    const book = this.prisma.book.findMany({
+      where: {
+        userId: '123456abc',
+      },
+      orderBy: {
+        updatedAt: 'desc',
+      },
+      take: 5,
+    });
+
+    // 3. Execução Paralela
+    const [resultMovie, resultSeries, resultGame, resultBook] =
+      await Promise.all([movie, series, book, game]);
+
+    const movieWithType = resultMovie.map((movie) => ({
+      ...movie,
+      type: 'MOVIE',
+    }));
+    const seriesWithType = resultSeries.map((series) => ({
+      ...series,
+      type: 'SERIES',
+    }));
+    const gameWithType = resultGame.map((game) => ({ ...game, type: 'GAME' }));
+    const bookWithType = resultBook.map((book) => ({ ...book, type: 'BOOK' }));
+
+    const superArray = [
+      ...movieWithType,
+      ...seriesWithType,
+      ...gameWithType,
+      ...bookWithType,
+    ];
+
+    const recentTimeline = superArray
+      .sort(
+        (a: { updatedAt: Date }, b: { updatedAt: Date }) =>
+          b.updatedAt.getTime() - a.updatedAt.getTime(),
+      )
+      .slice(0, 5);
+
+    return recentTimeline;
   }
 }
