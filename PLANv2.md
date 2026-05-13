@@ -15,18 +15,20 @@ Transformar o Back-end num integrador de dados dinâmico e construir a base de p
 - [x] **Integrações (TMDB, RAWG, OpenLibrary)**: Criar os módulos/serviços isolados de busca.
 - [x] **Criação dos Domínios**: Gerar os Resources definitivos (`movies`, `series`, `books`, `games`).
 - [x] **A Grande Conexão**: Injetar cada serviço externo em seu respectivo domínio para as rotas de busca.
-- [ ] **Segurança de Entrada (DTOs)**: Configurar o `class-validator` nos Data Transfer Objects para proteger as rotas de criação e atualização de todos os domínios.
-- [ ] **Integração Prisma (CRUD)**: Implementar os métodos de criar, ler, atualizar e deletar usando o `this.prisma` nos services de todas as models.
-- [ ] **Regras de Negócio**: Lógica de preenchimento automático (ex: data de `finishedAt` preenchida ao mudar status para `FINISHED`).
+- [x] **Segurança de Entrada (DTOs)**: Configurar o `class-validator` nos Data Transfer Objects para proteger as rotas de criação e atualização de todos os domínios.
+- [x] **Integração Prisma (CRUD)**: Implementar os métodos de criar, ler, atualizar e deletar usando o `this.prisma` nos services de todas as models.
+- [x] **Regras de Negócio**: Lógica de preenchimento automático (ex: data de `finishedAt` preenchida ao mudar status para `FINISHED`).
 
-## 🧠 Sprint 3: O Cérebro Matemático (Dashboard & `.reduce()`)
+## 🧠 Sprint 3: O Cérebro Matemático (Dashboard & Analytics)
 Implementação da inteligência de agregação de dados no servidor.
 
-- [ ] **Criação da Rota `/dashboard`**: Endpoint dedicado para fornecer dados consolidados ao Front-end.
-- [ ] **Lógica de Agregação (`.reduce()`)**: 
-    - [ ] Cálculo da média geral de notas por categoria.
-    - [ ] Somatório total de horas jogadas e páginas lidas.
-- [ ] **Filtros e Contagem**: Lógica para agrupar itens por gênero e status de conclusão.
+- [ ] **Criação do DashboardModule**: Estruturação de um módulo, controller e service independentes.
+- [ ] **Criação da Rota `/dashboard`**: Endpoints dedicados para fornecer dados consolidados ao Front-end.
+- [ ] **Lógica de Agregação (Totais)**: Somatório de horas jogadas (Games), páginas lidas (Books) e episódios assistidos (Series).
+- [ ] **Lógica de Avaliação (Médias)**: Cálculo da média geral de notas usando `.reduce()` para descobrir o desempenho por categoria.
+- [ ] **Filtros e Contagem**: Contagem exata de itens agrupados por status (`WISHLIST`, `IN_PROGRESS`, `FINISHED`).
+- [ ] **Ranqueamento de Tags**: Algoritmo para ranquear os gêneros favoritos com base na repetição de tags.
+- [ ] **Histórico de Atividade**: Busca dos últimos itens interagidos para a seção "Continuar de onde parou".
 
 ## 🎨 Sprint 4: O Espetáculo Visual (React + Tailwind)
 Refatoração da UI/UX para exibir as novas funcionalidades e estatísticas.

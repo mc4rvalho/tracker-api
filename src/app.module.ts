@@ -10,6 +10,7 @@ import { MoviesModule } from './movies/movies.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { SeriesModule } from './series/series.module';
 import { TmdbModule } from './integrations/tmdb/tmdb.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { TmdbModule } from './integrations/tmdb/tmdb.module';
     GamesModule,
     BooksModule,
     OpenLibraryModule,
+    DashboardModule,
   ],
   controllers: [AppController],
   providers: [AppService],
