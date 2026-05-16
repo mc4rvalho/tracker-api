@@ -10,10 +10,10 @@ export class DashboardController {
     return await this.dash.getTotals();
   }
 
-  // @Get('analytics')
-  // async getAnalytics() {
-  //   return await this.dash.getAnalytics();
-  // }
+  @Get('analytics')
+  async getAnalytics() {
+    return await this.dash.getAnalytics();
+  }
 
   @Get('recent')
   async getRecentActivity() {

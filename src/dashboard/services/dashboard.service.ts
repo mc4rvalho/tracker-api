@@ -136,7 +136,7 @@ export class DashboardService {
 
     // 3. Execução Paralela
     const [resultMovie, resultSeries, resultGame, resultBook] =
-      await Promise.all([movie, series, book, game]);
+      await Promise.all([movie, series, game, book]);
 
     const movieWithType = resultMovie.map((movie) => ({
       ...movie,
@@ -164,5 +164,95 @@ export class DashboardService {
       .slice(0, 5);
 
     return recentTimeline;
+  }
+
+  async getAnalytics() {
+    const movie = this.prisma.movie.findMany({
+      where: {
+        userId: '123456abc',
+      },
+      select: {
+        grade: true,
+        tags: true,
+      },
+    });
+
+    const series = this.prisma.series.findMany({
+      where: {
+        userId: '123456abc',
+      },
+      select: {
+        grade: true,
+        tags: true,
+      },
+    });
+
+    const game = this.prisma.game.findMany({
+      where: {
+        userId: '123456abc',
+      },
+      select: {
+        grade: true,
+        tags: true,
+      },
+    });
+
+    const book = this.prisma.book.findMany({
+      where: {
+        userId: '123456abc',
+      },
+      select: {
+        grade: true,
+        tags: true,
+      },
+    });
+
+    // 3. Execução Paralela
+    const [resultMovie, resultSeries, resultGame, resultBook] =
+      await Promise.all([movie, series, game, book]);
+
+    const superArray = [
+      ...resultMovie,
+      ...resultSeries,
+      ...resultGame,
+      ...resultBook,
+    ];
+
+    const initialValue = 0;
+    const filterGrade = superArray.filter(
+      (item) => item.grade && item.grade > 0,
+    );
+
+    const sumGrades = filterGrade.reduce(
+      (accumulator, item) => accumulator + item.grade,
+      initialValue,
+    );
+
+    const averageGrade =
+      filterGrade.length > 0 ? sumGrades / filterGrade.length : 0;
+
+    const allTags = superArray.flatMap((item) => item.tags || []);
+
+    const initialValueTags = {};
+
+    const tagCounts = allTags.reduce((accumulator, item) => {
+      if (accumulator[item]) {
+        accumulator[item] += 1;
+      } else {
+        accumulator[item] = 1;
+      }
+
+      return accumulator;
+    }, initialValueTags);
+
+    const topGenres = Object.entries(tagCounts)
+      .map(([name, amount]) => ({ tag: name, count: amount as number }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 3);
+
+    return {
+      averageGrade,
+      topGenres,
+    };
   }
 }
