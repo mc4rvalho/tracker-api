@@ -1,6 +1,7 @@
 # 🗺️ Planejamento: Tracker v2.0
 
 ## 🗄️ Sprint 1: O Novo Alicerce (Prisma & Banco de Dados) -> (Domingo)
+
 Foco em evoluir a estrutura de dados para suportar as novas categorias e métricas de consumo.
 
 - [x] **Refatoração do `schema.prisma`**: Criar User e Role e uma estrutura flexível que acomode Movie, Series, Game e Book.
@@ -9,6 +10,7 @@ Foco em evoluir a estrutura de dados para suportar as novas categorias e métric
 - [x] **Tags e Temporalidade**: Adicionar suporte a gêneros/tags (Array de strings) e o campo `finishedAt`.
 
 ## ⚙️ Sprint 2: O Motor de Busca e Persistência (APIs Externas + Prisma)
+
 Transformar o Back-end num integrador de dados dinâmico e construir a base de persistência (CRUD).
 
 - [x] **Limpeza Arquitetural**: Deletar a antiga pasta `tracker`.
@@ -20,6 +22,7 @@ Transformar o Back-end num integrador de dados dinâmico e construir a base de p
 - [x] **Regras de Negócio**: Lógica de preenchimento automático (ex: data de `finishedAt` preenchida ao mudar status para `FINISHED`).
 
 ## 🧠 Sprint 3: O Cérebro Matemático (Dashboard & Analytics)
+
 Implementação da inteligência de agregação de dados no servidor.
 
 - [x] **Criação do DashboardModule**: Estruturação de um módulo, controller e service independentes.
@@ -27,17 +30,23 @@ Implementação da inteligência de agregação de dados no servidor.
 - [x] **Lógica de Agregação (Totais)**: Somatório de horas jogadas (Games), páginas lidas (Books) e episódios assistidos (Series).
 - [ ] **Lógica de Avaliação (Médias)**: Cálculo da média geral de notas usando `.reduce()` para descobrir o desempenho por categoria.
 - [x] **Filtros e Contagem**: Contagem exata de itens agrupados por status (`WISHLIST`, `IN_PROGRESS`, `FINISHED`).
-- [ ] **Ranqueamento de Tags**: Algoritmo para ranquear os gêneros favoritos com base na repetição de tags.
-- [ ] **Histórico de Atividade**: Busca dos últimos itens interagidos para a seção "Continuar de onde parou".
+- [x] **Ranqueamento de Tags**: Algoritmo para ranquear os gêneros favoritos com base na repetição de tags.
+- [x] **Histórico de Atividade**: Busca dos últimos itens interagidos para a seção "Continuar de onde parou".
 
 ## 🎨 Sprint 4: O Espetáculo Visual (React + Tailwind)
-Refatoração da UI/UX para exibir as novas funcionalidades e estatísticas.
 
-- [ ] **Dark/Light Mode**: Implementação de tema dinâmico utilizando as classes de contexto do Tailwind CSS.
-- [ ] **Componentes de Progresso**: Barras visuais baseadas na relação "atual vs total" (episódios/páginas).
-- [ ] **Dashboard UI**: Cards de estatísticas de alto nível no topo da aplicação.
+_Onde a lógica do servidor ganha vida e interatividade._
+
+- [ ] **Dark/Light Mode**: Implementação de tema dinâmico (Tailwind `dark:` classes). Vamos configurar uma paleta noturna elegante, puxando para tons de um Tokyo Night ou One Dark Pro, para deixar a interface super imersiva e agradável.
+- [ ] **Camada de Serviços (API Connection)**: Configurar as chamadas HTTP (usando `fetch` ou Axios) no React para bater nos nossos endpoints `/dashboard/*` recém-criados e guardar os dados no estado da aplicação.
+- [ ] **Dashboard UI (Totais)**: Criação dos Cards numéricos no topo da tela consumindo os totais de páginas, horas e episódios, e um gráfico de pizza/donut simples para a distribuição de status (`IN_PROGRESS`, `FINISHED`, etc).
+- [ ] **Componentes de Progresso**: Barras visuais e circulares para exibir a relação "atual vs total" dentro dos cards individuais de livros, jogos e séries.
+- [ ] **Seção de Atividades Recentes**: Um componente de Timeline ou Lista Vertical para exibir o array de `/recent`, criando um ícone ou cor diferente dinamicamente dependendo do `type` (`GAME`, `BOOK`, `MOVIE`, `SERIES`).
+- [ ] **Dashboard UI (Analytics)**: Uma seção dedicada aos "Insights", exibindo a sua Média Geral (`averageGrade`) com algumas estrelas animadas e um gráfico ou pódio em lista para exibir o seu array `topGenres`.
+- [ ] **Tratamento de UX (Loading & Empty States)**: Criar Skeleton Loaders (aquelas barras cinzas piscando) enquanto o React espera a API devolver os dados, e telas de "Você ainda não tem itens recentes" para quando os arrays vierem vazios.
 
 ## 🔐 Sprint 5: Sistema de Autenticação (Auth & JWT)
+
 Foco em proteger a aplicação, garantindo que cada usuário só veja os seus próprios dados.
 
 - [ ] **Segurança de Senhas**: Instalar o `bcrypt` para criptografar as senhas antes de salvar no banco.
