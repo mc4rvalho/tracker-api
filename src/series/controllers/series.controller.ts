@@ -14,6 +14,10 @@ import { UpdateSeriesDto } from '../dto/update-series.dto';
 import { SeriesService } from '../services/series.service';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
+import {
+  CurrentUser,
+  type AuthUser,
+} from '../../auth/decorators/current-user.decorator';
 
 @ApiTags('Series')
 @ApiBearerAuth()
@@ -24,8 +28,11 @@ export class SeriesController {
 
   @Post()
   @ApiOperation({ summary: 'Creates a new Series in the database' })
-  async create(@Body() createSeriesDto: CreateSeriesDto) {
-    return await this.seriesService.create(createSeriesDto);
+  async create(
+    @CurrentUser() user: AuthUser,
+    @Body() createSeriesDto: CreateSeriesDto,
+  ) {
+    return await this.seriesService.create(createSeriesDto, user.userId);
   }
 
   @Get()

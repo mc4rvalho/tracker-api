@@ -14,6 +14,10 @@ import { UpdateMovieDto } from '../dto/update-movie.dto';
 import { MoviesService } from '../services/movies.service';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
+import {
+  CurrentUser,
+  type AuthUser,
+} from '../../auth/decorators/current-user.decorator';
 
 @ApiTags('Movies')
 @ApiBearerAuth()
@@ -24,8 +28,11 @@ export class MoviesController {
 
   @Post()
   @ApiOperation({ summary: 'Creates a new Movie in the database' })
-  async create(@Body() createMovieDto: CreateMovieDto) {
-    return await this.moviesService.create(createMovieDto);
+  async create(
+    @CurrentUser() user: AuthUser,
+    @Body() createMovieDto: CreateMovieDto,
+  ) {
+    return await this.moviesService.create(createMovieDto, user.userId);
   }
 
   @Get()

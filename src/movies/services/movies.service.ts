@@ -13,9 +13,9 @@ export class MoviesService {
     private prisma: PrismaService,
   ) {}
 
-  async create(createMovieDto: CreateMovieDto): Promise<Movie> {
+  async create(createMovieDto: CreateMovieDto, userId: string): Promise<Movie> {
     return this.prisma.movie.create({
-      data: { ...createMovieDto, userId: '123456abc' },
+      data: { ...createMovieDto, userId },
     });
   }
 

@@ -14,6 +14,10 @@ import { UpdateBookDto } from '../dto/update-book.dto';
 import { BooksService } from '../services/books.service';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
+import {
+  CurrentUser,
+  type AuthUser,
+} from '../../auth/decorators/current-user.decorator';
 
 @ApiTags('Books')
 @ApiBearerAuth()
@@ -24,8 +28,11 @@ export class BooksController {
 
   @Post()
   @ApiOperation({ summary: 'Creates a new Book in the database' })
-  async create(@Body() createBookDto: CreateBookDto) {
-    return await this.booksService.create(createBookDto);
+  async create(
+    @CurrentUser() user: AuthUser,
+    @Body() createBookDto: CreateBookDto,
+  ) {
+    return await this.booksService.create(createBookDto, user.userId);
   }
 
   @Get()

@@ -14,6 +14,10 @@ import { UpdateGameDto } from '../dto/update-game.dto';
 import { GamesService } from '../services/games.service';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
+import {
+  CurrentUser,
+  type AuthUser,
+} from '../../auth/decorators/current-user.decorator';
 
 @ApiTags('Games')
 @ApiBearerAuth()
@@ -24,8 +28,11 @@ export class GamesController {
 
   @Post()
   @ApiOperation({ summary: 'Creates a new Game in the database' })
-  async create(@Body() createGameDto: CreateGameDto) {
-    return await this.gamesService.create(createGameDto);
+  async create(
+    @CurrentUser() user: AuthUser,
+    @Body() createGameDto: CreateGameDto,
+  ) {
+    return await this.gamesService.create(createGameDto, user.userId);
   }
 
   @Get()

@@ -13,9 +13,12 @@ export class SeriesService {
     private prisma: PrismaService,
   ) {}
 
-  async create(createSeriesDto: CreateSeriesDto): Promise<Series> {
+  async create(
+    createSeriesDto: CreateSeriesDto,
+    userId: string,
+  ): Promise<Series> {
     return this.prisma.series.create({
-      data: { ...createSeriesDto, userId: '123456abc' },
+      data: { ...createSeriesDto, userId },
     });
   }
 

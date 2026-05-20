@@ -13,9 +13,9 @@ export class GamesService {
     private prisma: PrismaService,
   ) {}
 
-  async create(createGameDto: CreateGameDto) {
+  async create(createGameDto: CreateGameDto, userId: string) {
     return this.prisma.game.create({
-      data: { ...createGameDto, userId: '123456abc' },
+      data: { ...createGameDto, userId },
     });
   }
 

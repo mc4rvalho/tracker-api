@@ -4,7 +4,6 @@ import {
   Post,
   Body,
   Patch,
-  Param,
   Delete,
   UseGuards,
 } from '@nestjs/common';
@@ -13,6 +12,10 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
+import {
+  type AuthUser,
+  CurrentUser,
+} from '../auth/decorators/current-user.decorator';
 
 @ApiTags('Users')
 @Controller('users')
@@ -34,22 +37,28 @@ export class UsersController {
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(id);
+  @Get('me')
+  @ApiOperation({ summary: 'Get logged in user profile' })
+  getMe(@CurrentUser() user: AuthUser) {
+    return this.usersService.findOne(user.userId);
   }
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(id, updateUserDto);
+  @Patch('me')
+  @ApiOperation({ summary: 'Update logged in user profile' })
+  updateMe(
+    @CurrentUser() user: AuthUser,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return this.usersService.update(user.userId, updateUserDto);
   }
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(id);
+  @ApiOperation({ summary: 'Delete own account' })
+  removeMe(@CurrentUser() user: AuthUser) {
+    return this.usersService.remove(user.userId);
   }
 }
