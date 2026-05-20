@@ -56,7 +56,7 @@ export class UsersController {
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  @Delete(':id')
+  @Delete('me')
   @ApiOperation({ summary: 'Delete own account' })
   removeMe(@CurrentUser() user: AuthUser) {
     return this.usersService.remove(user.userId);
