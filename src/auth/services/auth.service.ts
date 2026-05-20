@@ -1,61 +1,55 @@
-// /* eslint-disable @typescript-eslint/no-unsafe-argument */
-// /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-// /* eslint-disable @typescript-eslint/no-unused-vars */
-// /* eslint-disable @typescript-eslint/await-thenable */
-// import { JwtService } from '@nestjs/jwt';
-// import { UsersService } from '../../users/users.service';
-// import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-// import { Bcrypt } from '../bcrypt/bcrypt';
-// import { UsuarioLogin } from '../entities/usuariologin.entity';
+import { JwtService } from '@nestjs/jwt';
+import { UsersService } from '../../users/users.service';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Bcrypt } from '../bcrypt/bcrypt';
+import { LoginDto } from '../dto/login.dto';
 
-// @Injectable()
-// export class AuthService {
-//   constructor(
-//     private usuarioService: UsersService,
-//     private jwtService: JwtService,
-//     private bcrypt: Bcrypt,
-//   ) {}
+@Injectable()
+export class AuthService {
+  constructor(
+    private users: UsersService,
+    private jwt: JwtService,
+    private bcrypt: Bcrypt,
+  ) {}
 
-//   async validateUser(username: string, password: string): Promise<any> {
-//     const buscaUsuario = await this.usuarioService.findByUsuario(username);
+  // Utilizado pelo LocalStrategy para checar se o e-mail e senha batem
+  async validateUser(email: string, pass: string): Promise<any> {
+    const user = await this.users.findByEmail(email);
 
-//     if (!buscaUsuario) {
-//       throw new HttpException('Usuário não encontrado!', HttpStatus.NOT_FOUND);
-//     }
+    if (!user) {
+      throw new HttpException('User not found!', HttpStatus.NOT_FOUND);
+    }
 
-//     const matchPassword = await this.bcrypt.comparePassword(
-//       password,
-//       buscaUsuario.password,
-//     );
+    const isMatch = await this.bcrypt.comparePasswords(pass, user.password);
 
-//     if (matchPassword) {
-//       const { password, ...result } = buscaUsuario;
-//       return result;
-//     }
+    if (isMatch) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, ...result } = user;
+      return result;
+    }
 
-//     throw new HttpException(
-//       'Usuário ou Senha inválidos!',
-//       HttpStatus.UNAUTHORIZED,
-//     );
-//   }
+    throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+  }
 
-//   async login(usuarioLogin: UsuarioLogin) {
-//     const payload = { sub: usuarioLogin.usuario };
-//     const buscaUsuario = await this.usuarioService.findByUsuario(
-//       usuarioLogin.usuario,
-//     );
+  // Utilizado pelo Controller para gerar o Token final
+  async login(loginDto: LoginDto) {
+    const user = await this.users.findByEmail(loginDto.email);
 
-//     if (!buscaUsuario) {
-//       throw new HttpException('Usuário não encontrado!', HttpStatus.NOT_FOUND);
-//     }
+    if (!user) {
+      throw new HttpException('User not found!', HttpStatus.NOT_FOUND);
+    }
 
-//     return {
-//       id: buscaUsuario.id,
-//       nome: buscaUsuario.nome,
-//       usuario: usuarioLogin.usuario,
-//       senha: '',
-//       foto: buscaUsuario.foto,
-//       token: `Bearer ${this.jwtService.sign(payload)}`,
-//     };
-//   }
-// }
+    // Aqui é.  que vai gravado para "dentro" do Token JWT
+    const payload = { email: user.email, sub: user.id, role: user.role };
+
+    return {
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      },
+
+      access_token: this.jwt.sign(payload),
+    };
+  }
+}

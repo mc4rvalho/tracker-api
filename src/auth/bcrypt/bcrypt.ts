@@ -8,7 +8,7 @@ export class Bcrypt {
     return await bcrypt.hash(password, saltRounds);
   }
 
-  async comparePassword(
+  async comparePasswords(
     providedPassword: string,
     storedPassowrd: string,
   ): Promise<boolean> {

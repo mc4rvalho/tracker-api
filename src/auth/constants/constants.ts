@@ -1,3 +1,3 @@
 export const jwtConstants = {
-  secret: '37eb3d74e44561d2b9ec3e40da179f9e91571b7f350aee31cfee06b481f146fe',
+  secret: '07ee70eb1404d61a7f4d40ebe9c47642b98a4804f42e1f8918c5f8dc2fc58cce',
 };

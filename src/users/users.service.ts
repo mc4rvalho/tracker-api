@@ -7,9 +7,6 @@ import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
-  findByUsuario(username: string) {
-    throw new Error('Method not implemented.');
-  }
   constructor(
     private readonly prisma: PrismaService,
     private readonly bcrypt: Bcrypt,
@@ -45,6 +42,12 @@ export class UsersService {
     const { password, ...result } = user;
 
     return result;
+  }
+
+  async findByEmail(email: string) {
+    return await this.prisma.user.findUnique({
+      where: { email },
+    });
   }
 
   async findAll() {
