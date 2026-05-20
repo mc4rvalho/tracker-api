@@ -7,13 +7,17 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateSeriesDto } from '../dto/create-series.dto';
 import { UpdateSeriesDto } from '../dto/update-series.dto';
 import { SeriesService } from '../services/series.service';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
 
 @ApiTags('Series')
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @Controller('series')
 export class SeriesController {
   constructor(private readonly seriesService: SeriesService) {}

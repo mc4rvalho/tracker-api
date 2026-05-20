@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, Global } from '@nestjs/common';
 import { Bcrypt } from './bcrypt/bcrypt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
@@ -9,6 +9,7 @@ import { JwtStrategy } from './strategy/jwt.strategy';
 import { UsersModule } from '../users/users.module';
 import { AuthController } from './constants/controllers/auth.controller';
 
+@Global()
 @Module({
   imports: [
     UsersModule,
@@ -20,6 +21,6 @@ import { AuthController } from './constants/controllers/auth.controller';
   ],
   controllers: [AuthController],
   providers: [AuthService, Bcrypt, LocalStrategy, JwtStrategy],
-  exports: [AuthService, Bcrypt],
+  exports: [AuthService, Bcrypt, JwtStrategy, PassportModule],
 })
 export class AuthModule {}

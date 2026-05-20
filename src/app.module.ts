@@ -10,6 +10,7 @@ import { SeriesModule } from './series/series.module';
 import { TmdbModule } from './integrations/tmdb/tmdb.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { UsersModule } from './users/users.module';
     OpenLibraryModule,
     DashboardModule,
     UsersModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
