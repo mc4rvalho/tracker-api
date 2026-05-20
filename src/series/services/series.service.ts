@@ -22,20 +22,23 @@ export class SeriesService {
     });
   }
 
-  async findAll(filters?: {
-    title?: string;
-    category?: string;
-    grade?: number;
-    review?: string;
-    watchedEpisodes?: number;
-    totalEpisodes?: number;
-    seasons?: number;
-    seasonsWatched?: number;
-    tags?: string[];
-  }) {
+  async findAll(
+    userId: string,
+    filters?: {
+      title?: string;
+      category?: string;
+      grade?: number;
+      review?: string;
+      watchedEpisodes?: number;
+      totalEpisodes?: number;
+      seasons?: number;
+      seasonsWatched?: number;
+      tags?: string[];
+    },
+  ) {
     return this.prisma.series.findMany({
       where: {
-        userId: '123456abc',
+        userId,
         title: filters?.title || undefined,
         category: filters?.category || undefined,
         grade: filters?.grade || undefined,
@@ -49,15 +52,25 @@ export class SeriesService {
     });
   }
 
-  async findOne(id: string) {
-    return this.prisma.series.findUnique({ where: { id } });
+  async findOne(id: string, userId: string) {
+    const series = await this.prisma.series.findFirst({
+      where: { id },
+    });
+
+    if (!series) {
+      throw new NotFoundException(
+        'Opa, essa série não existe ou acesso negado!',
+      );
+    }
+    return series;
   }
 
   async searchFromTmdb(title: string) {
     return this.tmdb.searchSeries(title);
   }
 
-  async update(id: string, updateSeriesDto: UpdateSeriesDto) {
+  async update(id: string, updateSeriesDto: UpdateSeriesDto, userId: string) {
+    await this.findOne(id, userId);
     const dataToUpdate: Prisma.SeriesUpdateInput = {
       ...updateSeriesDto,
     };
@@ -72,16 +85,12 @@ export class SeriesService {
     });
   }
 
-  async remove(id: string) {
-    try {
-      await this.prisma.series.delete({
-        where: { id },
-      });
-    } catch (error) {
-      throw new NotFoundException(
-        'Opa, essa série não existe ou já foi apagado!',
-      );
-    }
+  async remove(id: string, userId: string) {
+    await this.findOne(id, userId);
+
+    await this.prisma.series.delete({
+      where: { id },
+    });
 
     return { message: 'Série excluída com sucesso!' };
   }

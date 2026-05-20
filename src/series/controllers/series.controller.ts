@@ -37,8 +37,8 @@ export class SeriesController {
 
   @Get()
   @ApiOperation({ summary: 'Search all Series in the database' })
-  async findAll() {
-    return await this.seriesService.findAll();
+  async findAll(@CurrentUser() user: AuthUser) {
+    return await this.seriesService.findAll(user.userId);
   }
 
   @Get('search')
@@ -49,8 +49,8 @@ export class SeriesController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Search a Series for ID' })
-  async findOne(@Param('id') id: string) {
-    return await this.seriesService.findOne(id);
+  async findOne(@Param('id') id: string, @CurrentUser() user: AuthUser) {
+    return await this.seriesService.findOne(id, user.userId);
   }
 
   @Patch(':id')
@@ -58,13 +58,14 @@ export class SeriesController {
   async update(
     @Param('id') id: string,
     @Body() updateSeriesDto: UpdateSeriesDto,
+    @CurrentUser() user: AuthUser,
   ) {
-    return await this.seriesService.update(id, updateSeriesDto);
+    return await this.seriesService.update(id, updateSeriesDto, user.userId);
   }
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete Series in the database' })
-  async remove(@Param('id') id: string) {
-    return await this.seriesService.remove(id);
+  async remove(@Param('id') id: string, @CurrentUser() user: AuthUser) {
+    return await this.seriesService.remove(id, user.userId);
   }
 }

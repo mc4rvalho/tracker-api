@@ -37,8 +37,8 @@ export class GamesController {
 
   @Get()
   @ApiOperation({ summary: 'Search all Games in the database' })
-  async findAll() {
-    return await this.gamesService.findAll();
+  async findAll(@CurrentUser() user: AuthUser) {
+    return await this.gamesService.findAll(user.userId);
   }
 
   @Get('search')
@@ -49,19 +49,23 @@ export class GamesController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Search a Game by ID' })
-  async findOne(@Param('id') id: string) {
-    return await this.gamesService.findOne(id);
+  async findOne(@Param('id') id: string, @CurrentUser() user: AuthUser) {
+    return await this.gamesService.findOne(id, user.userId);
   }
 
   @Patch(':id')
   @ApiOperation({ summary: 'Update Game in the database' })
-  async update(@Param('id') id: string, @Body() updateGameDto: UpdateGameDto) {
-    return await this.gamesService.update(id, updateGameDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateGameDto: UpdateGameDto,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return await this.gamesService.update(id, updateGameDto, user.userId);
   }
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete Game in the database' })
-  async remove(@Param('id') id: string) {
-    return await this.gamesService.remove(id);
+  async remove(@Param('id') id: string, @CurrentUser() user: AuthUser) {
+    return await this.gamesService.remove(id, user.userId);
   }
 }

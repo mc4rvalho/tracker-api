@@ -5,45 +5,45 @@ import { PrismaService } from '../../prisma/prisma.service';
 export class DashboardService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getTotals() {
+  async getTotals(userId: string) {
     // 1. Agregações de Soma
     const series = this.prisma.series.aggregate({
       _sum: { watchedEpisodes: true },
-      where: { userId: '123456abc' },
+      where: { userId },
     });
 
     const game = this.prisma.game.aggregate({
       _sum: { hoursPlayed: true },
-      where: { userId: '123456abc' },
+      where: { userId },
     });
 
     const book = this.prisma.book.aggregate({
       _sum: { readPages: true },
-      where: { userId: '123456abc' },
+      where: { userId },
     });
 
     // 2. Agregações de Contagem por Grupo (Status)
     const resultStatusMovie = this.prisma.movie.groupBy({
       by: ['status'],
-      where: { userId: '123456abc' },
+      where: { userId },
       _count: { status: true },
     });
 
     const resultStatusSeries = this.prisma.series.groupBy({
       by: ['status'],
-      where: { userId: '123456abc' },
+      where: { userId },
       _count: { status: true },
     });
 
     const resultStatusGame = this.prisma.game.groupBy({
       by: ['status'],
-      where: { userId: '123456abc' },
+      where: { userId },
       _count: { status: true },
     });
 
     const resultStatusBook = this.prisma.book.groupBy({
       by: ['status'],
-      where: { userId: '123456abc' },
+      where: { userId },
       _count: { status: true },
     });
 
@@ -93,11 +93,9 @@ export class DashboardService {
     };
   }
 
-  async getRecentActivity() {
+  async getRecentActivity(userId: string) {
     const movie = this.prisma.movie.findMany({
-      where: {
-        userId: '123456abc',
-      },
+      where: { userId },
       orderBy: {
         updatedAt: 'desc',
       },
@@ -105,9 +103,7 @@ export class DashboardService {
     });
 
     const series = this.prisma.series.findMany({
-      where: {
-        userId: '123456abc',
-      },
+      where: { userId },
       orderBy: {
         updatedAt: 'desc',
       },
@@ -115,9 +111,7 @@ export class DashboardService {
     });
 
     const game = this.prisma.game.findMany({
-      where: {
-        userId: '123456abc',
-      },
+      where: { userId },
       orderBy: {
         updatedAt: 'desc',
       },
@@ -125,9 +119,7 @@ export class DashboardService {
     });
 
     const book = this.prisma.book.findMany({
-      where: {
-        userId: '123456abc',
-      },
+      where: { userId },
       orderBy: {
         updatedAt: 'desc',
       },
@@ -166,11 +158,9 @@ export class DashboardService {
     return recentTimeline;
   }
 
-  async getAnalytics() {
+  async getAnalytics(userId: string) {
     const movie = this.prisma.movie.findMany({
-      where: {
-        userId: '123456abc',
-      },
+      where: { userId },
       select: {
         grade: true,
         tags: true,
@@ -178,9 +168,7 @@ export class DashboardService {
     });
 
     const series = this.prisma.series.findMany({
-      where: {
-        userId: '123456abc',
-      },
+      where: { userId },
       select: {
         grade: true,
         tags: true,
@@ -188,9 +176,7 @@ export class DashboardService {
     });
 
     const game = this.prisma.game.findMany({
-      where: {
-        userId: '123456abc',
-      },
+      where: { userId },
       select: {
         grade: true,
         tags: true,
@@ -198,9 +184,7 @@ export class DashboardService {
     });
 
     const book = this.prisma.book.findMany({
-      where: {
-        userId: '123456abc',
-      },
+      where: { userId },
       select: {
         grade: true,
         tags: true,

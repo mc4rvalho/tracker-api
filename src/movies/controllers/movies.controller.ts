@@ -36,9 +36,9 @@ export class MoviesController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Search all Movies in the database' })
-  async findAll() {
-    return await this.moviesService.findAll();
+  @ApiOperation({ summary: 'Get all movies from logged user' })
+  async findAll(@CurrentUser() user: AuthUser) {
+    return await this.moviesService.findAll(user.userId);
   }
 
   @Get('search')
@@ -49,8 +49,8 @@ export class MoviesController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Search a Movie by ID' })
-  async findOne(@Param('id') id: string) {
-    return await this.moviesService.findOne(id);
+  async findOne(@Param('id') id: string, @CurrentUser() user: AuthUser) {
+    return await this.moviesService.findOne(id, user.userId);
   }
 
   @Patch(':id')
@@ -58,13 +58,14 @@ export class MoviesController {
   async update(
     @Param('id') id: string,
     @Body() updateMovieDto: UpdateMovieDto,
+    @CurrentUser() user: AuthUser,
   ) {
-    return await this.moviesService.update(id, updateMovieDto);
+    return await this.moviesService.update(id, updateMovieDto, user.userId);
   }
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete Movie in the database' })
-  async remove(@Param('id') id: string) {
-    return await this.moviesService.remove(id);
+  async remove(@Param('id') id: string, @CurrentUser() user: AuthUser) {
+    return await this.moviesService.remove(id, user.userId);
   }
 }

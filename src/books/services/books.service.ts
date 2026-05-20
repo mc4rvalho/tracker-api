@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateBookDto } from '../dto/create-book.dto';
 import { UpdateBookDto } from '../dto/update-book.dto';
@@ -19,18 +18,21 @@ export class BooksService {
     });
   }
 
-  async findAll(filters?: {
-    title?: string;
-    category?: string;
-    grade?: number;
-    coverPath?: string;
-    review?: string;
-    author?: string;
-    tags?: string[];
-  }) {
+  async findAll(
+    userId: string,
+    filters?: {
+      title?: string;
+      category?: string;
+      grade?: number;
+      coverPath?: string;
+      review?: string;
+      author?: string;
+      tags?: string[];
+    },
+  ) {
     return this.prisma.book.findMany({
       where: {
-        userId: '123456abc',
+        userId,
         title: filters?.title || undefined,
         category: filters?.category || undefined,
         grade: filters?.grade || undefined,
@@ -42,15 +44,25 @@ export class BooksService {
     });
   }
 
-  async findOne(id: string) {
-    return this.prisma.book.findUnique({ where: { id } });
+  async findOne(id: string, userId: string) {
+    const book = await this.prisma.book.findUnique({ where: { id, userId } });
+
+    if (!book) {
+      throw new NotFoundException(
+        'Opa, esse livro não existe ou acesso negado!',
+      );
+    }
+
+    return book;
   }
 
   async searchFromOpenLibrary(title: string) {
     return this.open.searchBook(title);
   }
 
-  async update(id: string, updateBookDto: UpdateBookDto) {
+  async update(id: string, updateBookDto: UpdateBookDto, userId: string) {
+    await this.findOne(id, userId);
+
     const dataToUpdate: Prisma.BookUpdateInput = {
       ...updateBookDto,
     };
@@ -65,16 +77,12 @@ export class BooksService {
     });
   }
 
-  async remove(id: string) {
-    try {
-      await this.prisma.book.delete({
-        where: { id },
-      });
-    } catch (error) {
-      throw new NotFoundException(
-        'Opa, esse livro não existe ou já foi apagado!',
-      );
-    }
+  async remove(id: string, userId: string) {
+    await this.findOne(id, userId);
+
+    await this.prisma.book.delete({
+      where: { id },
+    });
 
     return { message: 'Livro excluído com sucesso!' };
   }

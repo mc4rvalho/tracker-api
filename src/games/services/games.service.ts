@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { RawgService } from '../../integrations/rawg/rawg.service';
 import { CreateGameDto } from '../dto/create-game.dto';
@@ -19,20 +18,23 @@ export class GamesService {
     });
   }
 
-  async findAll(filters?: {
-    title?: string;
-    category?: string;
-    grade?: number;
-    hoursPlayed?: number;
-    coverPath?: string;
-    review?: string;
-    platform?: string;
-    isPlatinum?: boolean;
-    tags?: string[];
-  }) {
+  async findAll(
+    userId: string,
+    filters?: {
+      title?: string;
+      category?: string;
+      grade?: number;
+      hoursPlayed?: number;
+      coverPath?: string;
+      review?: string;
+      platform?: string;
+      isPlatinum?: boolean;
+      tags?: string[];
+    },
+  ) {
     return this.prisma.game.findMany({
       where: {
-        userId: '123456abc',
+        userId,
         title: filters?.title || undefined,
         category: filters?.category || undefined,
         grade: filters?.grade || undefined,
@@ -46,15 +48,24 @@ export class GamesService {
     });
   }
 
-  async findOne(id: string) {
-    return this.prisma.game.findUnique({ where: { id } });
+  async findOne(id: string, userId: string) {
+    const game = await this.prisma.game.findUnique({ where: { id, userId } });
+
+    if (!game) {
+      throw new NotFoundException(
+        'Opa, esse jogo não existe ou acesso negado!',
+      );
+    }
+    return game;
   }
 
   async searchFromRawg(title: string) {
     return this.rawg.searchGames(title);
   }
 
-  async update(id: string, updateGameDto: UpdateGameDto) {
+  async update(id: string, updateGameDto: UpdateGameDto, userId: string) {
+    await this.findOne(id, userId);
+
     const dataToUpdate: Prisma.GameUpdateInput = {
       ...updateGameDto,
     };
@@ -66,16 +77,12 @@ export class GamesService {
     return this.prisma.game.update({ where: { id }, data: dataToUpdate });
   }
 
-  async remove(id: string) {
-    try {
-      await this.prisma.game.delete({
-        where: { id },
-      });
-    } catch (error) {
-      throw new NotFoundException(
-        'Opa, esse jogo não existe ou já foi apagado!',
-      );
-    }
+  async remove(id: string, userId: string) {
+    await this.findOne(id, userId);
+
+    await this.prisma.game.delete({
+      where: { id },
+    });
 
     return { message: 'Jogo excluído com sucesso!' };
   }

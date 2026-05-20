@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { TmdbService } from '../../integrations/tmdb/tmdb.service';
 import { CreateMovieDto } from '../dto/create-movie.dto';
@@ -19,16 +18,19 @@ export class MoviesService {
     });
   }
 
-  async findAll(filters?: {
-    title?: string;
-    category?: string;
-    grade?: number;
-    review?: string;
-    tags?: string[];
-  }) {
+  async findAll(
+    userId: string,
+    filters?: {
+      title?: string;
+      category?: string;
+      grade?: number;
+      review?: string;
+      tags?: string[];
+    },
+  ) {
     return this.prisma.movie.findMany({
       where: {
-        userId: '123456abc',
+        userId,
         title: filters?.title || undefined,
         category: filters?.category || undefined,
         grade: filters?.grade || undefined,
@@ -38,15 +40,25 @@ export class MoviesService {
     });
   }
 
-  async findOne(id: string) {
-    return this.prisma.movie.findUnique({ where: { id } });
+  async findOne(id: string, userId: string) {
+    const movie = await this.prisma.movie.findFirst({ where: { id, userId } });
+
+    if (!movie) {
+      throw new NotFoundException(
+        'Opa, esse filme não existe ou acesso negado!',
+      );
+    }
+
+    return movie;
   }
 
   async searchFromTmdb(title: string) {
     return this.tmdb.searchMovie(title);
   }
 
-  async update(id: string, updateMovieDto: UpdateMovieDto) {
+  async update(id: string, updateMovieDto: UpdateMovieDto, userId: string) {
+    await this.findOne(id, userId);
+
     const dataToUpdate: Prisma.MovieUpdateInput = { ...updateMovieDto };
 
     if (updateMovieDto.status === 'FINISHED') {
@@ -59,16 +71,12 @@ export class MoviesService {
     });
   }
 
-  async remove(id: string) {
-    try {
-      await this.prisma.movie.delete({
-        where: { id },
-      });
-    } catch (error) {
-      throw new NotFoundException(
-        'Opa, esse filme não existe ou já foi apagado!',
-      );
-    }
+  async remove(id: string, userId: string) {
+    await this.findOne(id, userId);
+
+    await this.prisma.movie.delete({
+      where: { id },
+    });
 
     return { message: 'Filme excluído com sucesso!' };
   }

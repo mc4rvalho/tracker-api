@@ -37,8 +37,8 @@ export class BooksController {
 
   @Get()
   @ApiOperation({ summary: 'Search all Books in the database' })
-  async findAll() {
-    return await this.booksService.findAll();
+  async findAll(@CurrentUser() user: AuthUser) {
+    return await this.booksService.findAll(user.userId);
   }
 
   @Get('search')
@@ -49,19 +49,23 @@ export class BooksController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Search a Book by ID' })
-  async findOne(@Param('id') id: string) {
-    return await this.booksService.findOne(id);
+  async findOne(@Param('id') id: string, @CurrentUser() user: AuthUser) {
+    return await this.booksService.findOne(id, user.userId);
   }
 
   @Patch(':id')
   @ApiOperation({ summary: 'Update Book in the database' })
-  async update(@Param('id') id: string, @Body() updateBookDto: UpdateBookDto) {
-    return await this.booksService.update(id, updateBookDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateBookDto: UpdateBookDto,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return await this.booksService.update(id, updateBookDto, user.userId);
   }
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete Book in the database' })
-  async remove(@Param('id') id: string) {
-    return await this.booksService.remove(id);
+  async remove(@Param('id') id: string, @CurrentUser() user: AuthUser) {
+    return await this.booksService.remove(id, user.userId);
   }
 }
