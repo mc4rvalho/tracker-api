@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
@@ -25,6 +26,11 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   app.enableCors();
+
+  const httpAdapter = app.getHttpAdapter();
+  httpAdapter.get('/', (req: any, res: any) => {
+    res.redirect('/swagger');
+  });
 
   await app.listen(process.env.PORT ?? 4000);
 }
