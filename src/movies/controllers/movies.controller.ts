@@ -11,32 +11,39 @@ import {
 import { CreateMovieDto } from '../dto/create-movie.dto';
 import { UpdateMovieDto } from '../dto/update-movie.dto';
 import { MoviesService } from '../services/movies.service';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
+@ApiTags('Movies')
 @Controller('movies')
 export class MoviesController {
   constructor(private readonly moviesService: MoviesService) {}
 
   @Post()
+  @ApiOperation({ summary: 'Creates a new Movie in the database' })
   async create(@Body() createMovieDto: CreateMovieDto) {
     return await this.moviesService.create(createMovieDto);
   }
 
   @Get()
+  @ApiOperation({ summary: 'Search all Movies in the database' })
   async findAll() {
     return await this.moviesService.findAll();
   }
 
   @Get('search')
+  @ApiOperation({ summary: 'Search a Movie in the TMDB API' })
   async findSearch(@Query('title') title: string): Promise<any[]> {
     return await this.moviesService.searchFromTmdb(title);
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Search a Movie by ID' })
   async findOne(@Param('id') id: string) {
     return await this.moviesService.findOne(id);
   }
 
   @Patch(':id')
+  @ApiOperation({ summary: 'Update Movie in the database' })
   async update(
     @Param('id') id: string,
     @Body() updateMovieDto: UpdateMovieDto,
@@ -45,6 +52,7 @@ export class MoviesController {
   }
 
   @Delete(':id')
+  @ApiOperation({ summary: 'Delete Movie in the database' })
   async remove(@Param('id') id: string) {
     return await this.moviesService.remove(id);
   }
