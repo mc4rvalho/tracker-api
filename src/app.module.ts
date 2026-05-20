@@ -9,6 +9,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { SeriesModule } from './series/series.module';
 import { TmdbModule } from './integrations/tmdb/tmdb.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
     BooksModule,
     OpenLibraryModule,
     DashboardModule,
+    UsersModule,
   ],
 })
 export class AppModule {}
