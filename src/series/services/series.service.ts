@@ -58,9 +58,7 @@ export class SeriesService {
     });
 
     if (!series) {
-      throw new NotFoundException(
-        'Opa, essa série não existe ou acesso negado!',
-      );
+      throw new NotFoundException('Series not found or access denied');
     }
     return series;
   }
@@ -92,6 +90,6 @@ export class SeriesService {
       where: { id },
     });
 
-    return { message: 'Série excluída com sucesso!' };
+    return { message: 'Series successfully deleted' };
   }
 }

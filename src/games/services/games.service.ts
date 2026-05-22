@@ -52,9 +52,7 @@ export class GamesService {
     const game = await this.prisma.game.findUnique({ where: { id, userId } });
 
     if (!game) {
-      throw new NotFoundException(
-        'Opa, esse jogo não existe ou acesso negado!',
-      );
+      throw new NotFoundException('Game not found or access denied');
     }
     return game;
   }
@@ -84,6 +82,6 @@ export class GamesService {
       where: { id },
     });
 
-    return { message: 'Jogo excluído com sucesso!' };
+    return { message: 'Game successfully deleted' };
   }
 }

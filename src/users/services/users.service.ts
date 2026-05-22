@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Bcrypt } from '../auth/bcrypt/bcrypt';
-import { PrismaService } from '../prisma/prisma.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { Bcrypt } from '../../auth/bcrypt/bcrypt';
+import { PrismaService } from '../../prisma/prisma.service';
+import { CreateUserDto } from '../dto/create-user.dto';
+import { UpdateUserDto } from '../dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -13,7 +13,7 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    // Verifica se o email já existe
+    // Check if email already exists
     const userExists = await this.prisma.user.findUnique({
       where: { email: createUserDto.email },
     });
@@ -25,12 +25,12 @@ export class UsersService {
       );
     }
 
-    // Criptografa a senha antes de salvá-la
+    // Encrypts the password before saving it.
     const hashedPassword = await this.bcrypt.hashPassword(
       createUserDto.password,
     );
 
-    // Salva no banco e retorna sem a senha
+    // Saved to the database and returned without the password.
     const user = await this.prisma.user.create({
       data: {
         name: createUserDto.name,

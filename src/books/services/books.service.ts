@@ -48,9 +48,7 @@ export class BooksService {
     const book = await this.prisma.book.findUnique({ where: { id, userId } });
 
     if (!book) {
-      throw new NotFoundException(
-        'Opa, esse livro não existe ou acesso negado!',
-      );
+      throw new NotFoundException('Book not found or access denied!');
     }
 
     return book;
@@ -84,6 +82,6 @@ export class BooksService {
       where: { id },
     });
 
-    return { message: 'Livro excluído com sucesso!' };
+    return { message: 'Book successfully deleted' };
   }
 }

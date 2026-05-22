@@ -20,7 +20,7 @@ export class OpenLibraryService {
       this.httpService.get<OpenLibrarySearchResponse>(url).pipe(
         catchError((error: AxiosError) => {
           this.logger.error(error.response?.data);
-          throw new Error('Falha ao buscar o livro na OpenLibrary');
+          throw new Error('Failed to fetch book from Open Library');
         }),
       ),
     );

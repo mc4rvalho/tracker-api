@@ -44,9 +44,7 @@ export class MoviesService {
     const movie = await this.prisma.movie.findFirst({ where: { id, userId } });
 
     if (!movie) {
-      throw new NotFoundException(
-        'Opa, esse filme não existe ou acesso negado!',
-      );
+      throw new NotFoundException('Movie not found or access denied');
     }
 
     return movie;
@@ -78,6 +76,6 @@ export class MoviesService {
       where: { id },
     });
 
-    return { message: 'Filme excluído com sucesso!' };
+    return { message: 'Movie successfully deleted' };
   }
 }

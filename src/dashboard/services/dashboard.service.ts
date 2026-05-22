@@ -6,7 +6,7 @@ export class DashboardService {
   constructor(private readonly prisma: PrismaService) {}
 
   async getTotals(userId: string) {
-    // 1. Agregações de Soma
+    // 1. Sum Aggregations
     const series = this.prisma.series.aggregate({
       _sum: { watchedEpisodes: true },
       where: { userId },
@@ -22,7 +22,7 @@ export class DashboardService {
       where: { userId },
     });
 
-    // 2. Agregações de Contagem por Grupo (Status)
+    // 2. Aggregations of Counts by Group (Status)
     const resultStatusMovie = this.prisma.movie.groupBy({
       by: ['status'],
       where: { userId },
@@ -47,7 +47,7 @@ export class DashboardService {
       _count: { status: true },
     });
 
-    // 3. Execução Paralela
+    // 3. Parallel Execution
     const [
       resultSeries,
       resultGame,
@@ -66,7 +66,7 @@ export class DashboardService {
       resultStatusBook,
     ]);
 
-    // 4. Consolidação dos Status
+    // 4. Consolidation of Status
     const statusDistribution = {
       WISHLIST: 0,
       IN_PROGRESS: 0,
@@ -84,7 +84,7 @@ export class DashboardService {
       statusDistribution[item.status] += item._count.status;
     });
 
-    // 5. Retorno Final Limpo
+    // 5. Final Clean Return
     return {
       totalWatchedEpisodes: resultSeries._sum.watchedEpisodes || 0,
       totalHoursPlayed: resultGame._sum.hoursPlayed || 0,
@@ -126,7 +126,7 @@ export class DashboardService {
       take: 5,
     });
 
-    // 3. Execução Paralela
+    // 3. Parallel Execution
     const [resultMovie, resultSeries, resultGame, resultBook] =
       await Promise.all([movie, series, game, book]);
 
@@ -191,7 +191,7 @@ export class DashboardService {
       },
     });
 
-    // 3. Execução Paralela
+    // 3. Parallel Execution
     const [resultMovie, resultSeries, resultGame, resultBook] =
       await Promise.all([movie, series, game, book]);
 

@@ -1,6 +1,6 @@
-import { JwtService } from '@nestjs/jwt';
-import { UsersService } from '../../users/users.service';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { UsersService } from '../../users/services/users.service';
 import { Bcrypt } from '../bcrypt/bcrypt';
 import { LoginDto } from '../dto/login.dto';
 
@@ -12,7 +12,7 @@ export class AuthService {
     private bcrypt: Bcrypt,
   ) {}
 
-  // Utilizado pelo LocalStrategy para checar se o e-mail e senha batem
+  // Used by LocalStrategy to check if the email and password match.
   async validateUser(email: string, pass: string): Promise<any> {
     const user = await this.users.findByEmail(email);
 
@@ -31,7 +31,7 @@ export class AuthService {
     throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
   }
 
-  // Utilizado pelo Controller para gerar o Token final
+  // Used by the Controller to generate the final Token
   async login(loginDto: LoginDto) {
     const user = await this.users.findByEmail(loginDto.email);
 
@@ -39,7 +39,7 @@ export class AuthService {
       throw new HttpException('User not found!', HttpStatus.NOT_FOUND);
     }
 
-    // Aqui é.  que vai gravado para "dentro" do Token JWT
+    // This is what will be recorded "inside" the JWT Token.
     const payload = { email: user.email, sub: user.id, role: user.role };
 
     return {

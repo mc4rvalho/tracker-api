@@ -20,7 +20,7 @@ export class RawgService {
       this.httpService.get<RawgSearchResponse>(url).pipe(
         catchError((error: AxiosError) => {
           this.logger.error(error.response?.data);
-          throw new Error('Falha ao buscar o game no RAWG');
+          throw new Error('Failed to fetch game from RAWG');
         }),
       ),
     );
