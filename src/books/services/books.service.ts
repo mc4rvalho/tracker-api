@@ -13,8 +13,13 @@ export class BooksService {
   ) {}
 
   async create(createBookDto: CreateBookDto, userId: string): Promise<Book> {
+    const details = await this.open.getBookDetails(createBookDto.openLibraryId);
     return this.prisma.book.create({
-      data: { ...createBookDto, userId },
+      data: {
+        ...createBookDto,
+        userId,
+        totalPages: details.number_of_pages ?? createBookDto.totalPages ?? 0,
+      },
     });
   }
 
