@@ -17,8 +17,15 @@ export class SeriesService {
     createSeriesDto: CreateSeriesDto,
     userId: string,
   ): Promise<Series> {
+    const details = await this.tmdb.getSeriesDetails(createSeriesDto.tmdbId);
+
     return this.prisma.series.create({
-      data: { ...createSeriesDto, userId },
+      data: {
+        ...createSeriesDto,
+        userId,
+        totalEpisodes: details.number_of_episodes,
+        seasons: details.number_of_seasons,
+      },
     });
   }
 

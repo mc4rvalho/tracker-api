@@ -39,8 +39,8 @@ Version 3.0 transforms the project from a passive CRUD application into an activ
 **Focus:** Expand integration Services to fetch deep media details using external IDs, automating total fields.
 
 - **Branch:** `feat/tmdb-deep-integration`
-  - [ ] Create `getSeriesDetails(tmdbId)` in `TmdbService` calling the `/tv/{id}` route to extract `number_of_episodes` and `number_of_seasons`.
-  - [ ] Update `SeriesService.create` to intercept and fetch these totals before saving to Prisma.
+  - [x] Create `getSeriesDetails(tmdbId)` in `TmdbService` calling the `/tv/{id}` route to extract `number_of_episodes` and `number_of_seasons`.
+  - [x] Update `SeriesService.create` to intercept and fetch these totals before saving to Prisma.
 - **Branch:** `feat/rawg-deep-integration`
   - [ ] Create `getGameDetails(rawgId)` in `RawgService` calling the `/games/{id}` route to extract `playtime`.
   - [ ] Update `GamesService.create` to intercept and fetch `hoursPlayed` totals.
