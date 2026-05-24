@@ -122,6 +122,7 @@ model Game {
   category    String
   grade       Float
   hoursPlayed Float
+  totalHoursPlayed Float?
   rawgId      Int
   coverPath   String?
   review      String?

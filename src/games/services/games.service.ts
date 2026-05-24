@@ -13,8 +13,13 @@ export class GamesService {
   ) {}
 
   async create(createGameDto: CreateGameDto, userId: string) {
+    const details = await this.rawg.getGameDetails(createGameDto.rawgId);
     return this.prisma.game.create({
-      data: { ...createGameDto, userId },
+      data: {
+        ...createGameDto,
+        userId,
+        totalHoursPlayed: details.playtime,
+      },
     });
   }
 

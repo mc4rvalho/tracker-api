@@ -42,8 +42,8 @@ Version 3.0 transforms the project from a passive CRUD application into an activ
   - [x] Create `getSeriesDetails(tmdbId)` in `TmdbService` calling the `/tv/{id}` route to extract `number_of_episodes` and `number_of_seasons`.
   - [x] Update `SeriesService.create` to intercept and fetch these totals before saving to Prisma.
 - **Branch:** `feat/rawg-deep-integration`
-  - [ ] Create `getGameDetails(rawgId)` in `RawgService` calling the `/games/{id}` route to extract `playtime`.
-  - [ ] Update `GamesService.create` to intercept and fetch `hoursPlayed` totals.
+  - [x] Create `getGameDetails(rawgId)` in `RawgService` calling the `/games/{id}` route to extract `playtime`.
+  - [x] Update `GamesService.create` to intercept and fetch `hoursPlayed` totals.
 - **Branch:** `feat/openlibrary-deep-integration`
   - [ ] Create `getBookDetails(openLibraryId)` in `OpenLibraryService` to extract `number_of_pages` and `author_name`.
   - [ ] Update `BooksService.create` to intercept and fetch these details.

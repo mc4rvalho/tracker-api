@@ -7,6 +7,10 @@ export interface RawgSearchResponse {
   results: any[];
 }
 
+export interface RawgDetailsResponse {
+  playtime: number;
+}
+
 @Injectable()
 export class RawgService {
   private readonly logger = new Logger(RawgService.name);
@@ -26,5 +30,20 @@ export class RawgService {
     );
 
     return data.results;
+  }
+
+  async getGameDetails(rawgId: number): Promise<RawgDetailsResponse> {
+    const url = `https://api.rawg.io/api/games/${rawgId}?key=${process.env.RAWG_API_KEY}`;
+
+    const { data } = await firstValueFrom(
+      this.httpService.get<RawgDetailsResponse>(url).pipe(
+        catchError((error: AxiosError) => {
+          this.logger.error(error.response?.data);
+          throw new Error('Failed to fetch game details from TMDB');
+        }),
+      ),
+    );
+
+    return data;
   }
 }
