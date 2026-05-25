@@ -34,12 +34,13 @@ export class CreateSeriesDto {
   })
   grade!: number;
 
+  @IsOptional()
   @IsNumber()
   @ApiProperty({
     description: 'Unique series ID in the TMDB API',
     example: 1622,
   })
-  tmdbId!: number;
+  tmdbId?: number;
 
   @IsString()
   @IsOptional()
@@ -85,24 +86,27 @@ export class CreateSeriesDto {
   })
   watchedEpisodes!: number;
 
+  @IsOptional()
   @IsNumber()
   @ApiProperty({
     description: 'Total number of episodes released/available',
     example: 327,
   })
-  totalEpisodes!: number;
+  totalEpisodes?: number;
 
+  @IsOptional()
   @IsNumber()
   @ApiProperty({
     description: 'Total number of seasons in the series',
     example: 15,
   })
-  seasons!: number;
+  seasons?: number;
 
+  @IsOptional()
   @IsNumber()
   @ApiProperty({
     description: 'Number of seasons completed by the user',
     example: 15,
   })
-  seasonsWatched!: number;
+  seasonsWatched?: number;
 }

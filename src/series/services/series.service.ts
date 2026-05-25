@@ -17,14 +17,30 @@ export class SeriesService {
     createSeriesDto: CreateSeriesDto,
     userId: string,
   ): Promise<Series> {
-    const details = await this.tmdb.getSeriesDetails(createSeriesDto.tmdbId);
+    let totalEpisodes = 0;
+    let seasons = 1;
+
+    if (createSeriesDto.tmdbId) {
+      try {
+        const details = await this.tmdb.getSeriesDetails(
+          createSeriesDto.tmdbId,
+        );
+        totalEpisodes = Number(details.number_of_episodes) || 0;
+        seasons = Number(details.number_of_seasons) || 1;
+      } catch (error) {
+        console.warn(`TMDB fetch failed for ID ${createSeriesDto.tmdbId}.`);
+      }
+    }
 
     return this.prisma.series.create({
       data: {
         ...createSeriesDto,
+        tmdbId: createSeriesDto.tmdbId || 0,
         userId,
-        totalEpisodes: details.number_of_episodes,
-        seasons: details.number_of_seasons,
+        totalEpisodes,
+        seasons,
+        watchedEpisodes: createSeriesDto.watchedEpisodes ?? 0,
+        seasonsWatched: createSeriesDto.seasonsWatched ?? 0,
       },
     });
   }
@@ -78,6 +94,10 @@ export class SeriesService {
     await this.findOne(id, userId);
     const dataToUpdate: Prisma.SeriesUpdateInput = {
       ...updateSeriesDto,
+      watchedEpisodes:
+        updateSeriesDto.watchedEpisodes !== undefined
+          ? updateSeriesDto.watchedEpisodes
+          : undefined,
     };
 
     if (updateSeriesDto.status === 'FINISHED') {

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateBookDto } from '../dto/create-book.dto';
 import { UpdateBookDto } from '../dto/update-book.dto';
@@ -13,12 +14,27 @@ export class BooksService {
   ) {}
 
   async create(createBookDto: CreateBookDto, userId: string): Promise<Book> {
-    const details = await this.open.getBookDetails(createBookDto.openLibraryId);
+    let totalPages = 0;
+
+    if (createBookDto.openLibraryId) {
+      try {
+        const details = await this.open.getBookDetails(
+          createBookDto.openLibraryId,
+        );
+        totalPages = details.number_of_pages || 0;
+      } catch (error) {
+        console.warn(
+          `OpenLibrary fetch failed for ID ${createBookDto.openLibraryId}. Saving without totals.`,
+        );
+      }
+    }
+
     return this.prisma.book.create({
       data: {
         ...createBookDto,
+        openLibraryId: String(createBookDto.openLibraryId) || '',
         userId,
-        totalPages: details.number_of_pages ?? createBookDto.totalPages ?? 0,
+        totalPages,
       },
     });
   }

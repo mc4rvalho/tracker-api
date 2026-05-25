@@ -55,14 +55,15 @@ Version 3.0 transforms the project from a passive CRUD application into an activ
 **Focus:** The user no longer types totals. The system displays dynamic progress and allows quick-click updates.
 
 - **Branch:** `feat/smart-form-cleanup`
-  - [ ] Remove "Total Episodes", "Total Hours", and "Total Pages" inputs from `<TrackerForm />` (Back-end handles this now).
-  - [ ] Hide category selection if the user opens the Modal from a specific route (e.g., auto-select "Game" if on `/games`).
+  - [x] Implement Global Modal Edit Mode (Context, Trigger e AutoComplete).
+  - [x] Remove "Total Episodes", "Total Hours", and "Total Pages" inputs from `<TrackerForm />` (Back-end handles this now).
+  - [x] Hide category selection if the user opens the Modal from a specific route (e.g., auto-select "Game" if on `/games`).
 - **Branch:** `feat/quick-update-buttons`
-  - [ ] Add "+1 Episode" or "+10 Pages" quick buttons directly on the `TrackerList` cards.
-  - [ ] Trigger silent `PATCH` requests and show success Toasts.
+  - [x] Add "+1 Episode" or "+10 Pages" quick buttons directly on the `TrackerList` cards.
+  - [x] Trigger silent `PATCH` requests and show success Toasts.
 - **Branch:** `feat/completion-review-modal`
-  - [ ] Add trigger: If `watched === total`, auto-change status to `FINISHED`.
-  - [ ] Open a "Congratulations!" mini-modal asking for the Final Rating and Text Review.
+  - [x] Add trigger: If `watched === total`, auto-change status to `FINISHED`.
+  - [x] Open a "Congratulations!" mini-modal asking for the Final Rating and Text Review.
 
 ---
 
@@ -71,12 +72,26 @@ Version 3.0 transforms the project from a passive CRUD application into an activ
 **Focus:** Utilize the new structured data (reviews, status, platinum) to generate visual reports.
 
 - **Branch:** `feat/trending-dashboard`
-  - [ ] Create a "Trending Now" section on the Home page fetching popular endpoints from TMDB/RAWG.
-  - [ ] Add charts showing "Completed vs. Abandoned" media.
+  - [x] Create a "Trending Now" section on the Home page fetching popular endpoints from TMDB/RAWG.
+  - [x] Add charts showing "Completed vs. Abandoned" media.
 - **Branch:** `feat/platinum-trophy-ui`
-  - [ ] Add an `isPlatinum` checkbox in the Game update form.
-  - [ ] Style Platinum game cards with gold borders or glow effects in Tailwind.
+  - [x] Add an `isPlatinum` checkbox in the Game update form.
+  - [x] Style Platinum game cards with gold borders or glow effects in Tailwind.
 - **Branch:** `feat/user-profile-page`
-  - [ ] Render user data and macro statistics in `Profile.tsx`.
-  - [ ] Display the user's last 5 written reviews.
-  - [ ] Layout Refactoring (Mobile-First): Review global alignments, paddings, and the responsiveness of lists, forms, and dashboard charts.
+  - [x] Render user data and macro statistics in `Profile.tsx`.
+  - [x] Display the user's last 5 written reviews.
+  - [x] Layout Refactoring (Mobile-First): Review global alignments, paddings, and the responsiveness of lists, forms, and dashboard charts.
+
+## 📚 Sprint 11: The Library Pages (Routing & Filtering)
+
+**Focus:** Create isolated pages for each category (Movies, Series, Games, Books) to allow focused viewing and management, expanding the SPA routing.
+
+- **Branch:** `feat/category-routes`
+  - [x] Set up React Router DOM paths for `/movies`, `/series`, `/games`, and `/books` in `App.tsx`.
+  - [x] Create base page components (`MoviesPage.tsx`, `SeriesPage.tsx`, etc.).
+- **Branch:** `feat/filtered-views`
+  - [x] Reuse the `TrackerList` component within each new page.
+  - [x] Implement local filtering or dedicated Back-end endpoints to fetch only trackers of the specific category.
+  - [x] Ensure the Global Modal works correctly when triggered from these new pages.
+- **Branch:** `feat/navigation-active-state`
+  - [x] Update the Header navigation links to visually highlight the active route.

@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { RawgService } from '../../integrations/rawg/rawg.service';
 import { CreateGameDto } from '../dto/create-game.dto';
 import { UpdateGameDto } from '../dto/update-game.dto';
 import { PrismaService } from '../../prisma/prisma.service';
-import { Prisma } from '../../../generated/prisma/client';
+import { Prisma, Game } from '../../../generated/prisma/client';
 
 @Injectable()
 export class GamesService {
@@ -12,13 +13,25 @@ export class GamesService {
     private prisma: PrismaService,
   ) {}
 
-  async create(createGameDto: CreateGameDto, userId: string) {
-    const details = await this.rawg.getGameDetails(createGameDto.rawgId);
+  async create(createGameDto: CreateGameDto, userId: string): Promise<Game> {
+    let totalHoursPlayed = 0;
+    if (createGameDto.rawgId) {
+      try {
+        const details = await this.rawg.getGameDetails(createGameDto.rawgId);
+        totalHoursPlayed = Number(details.playtime) || 0;
+      } catch (error) {
+        console.warn(
+          `RAWG fetch failed for ID ${createGameDto.rawgId}. Saving without totals.`,
+        );
+      }
+    }
+
     return this.prisma.game.create({
       data: {
         ...createGameDto,
+        rawgId: createGameDto.rawgId || 0,
         userId,
-        totalHoursPlayed: details.playtime,
+        totalHoursPlayed,
       },
     });
   }

@@ -42,12 +42,21 @@ export class CreateGameDto {
   })
   hoursPlayed!: number;
 
+  @IsOptional()
+  @IsNumber()
+  @ApiProperty({
+    description: 'Total hours to beat',
+    example: 50,
+    required: false,
+  })
+  totalHoursPlayed?: number;
+
   @IsNumber()
   @ApiProperty({
     description: 'Unique identifier from the RAWG API',
     example: 28199,
   })
-  rawgId!: number;
+  rawgId?: number;
 
   @IsString()
   @IsOptional()

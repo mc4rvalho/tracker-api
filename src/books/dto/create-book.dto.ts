@@ -34,12 +34,13 @@ export class CreateBookDto {
   })
   grade!: number;
 
+  @IsOptional()
   @IsString()
   @ApiProperty({
     description: 'Unique identifier from the Open Library API',
     example: 'OL27364670W',
   })
-  openLibraryId!: string;
+  openLibraryId?: string;
 
   @IsString()
   @IsOptional()
@@ -73,12 +74,13 @@ export class CreateBookDto {
   })
   readPages!: number;
 
+  @IsOptional()
   @IsNumber()
   @ApiProperty({
     description: 'Total number of pages in the book',
     example: 320,
   })
-  totalPages!: number;
+  totalPages?: number;
 
   @IsString({ each: true })
   @IsArray()
